@@ -5,7 +5,6 @@ public class Player {
     private int playerScore;
     private int ballsPlayed;
 
-
     public Player(String playerName){
         this.playerName = playerName;
         this.playerScore = 0;
