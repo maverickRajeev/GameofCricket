@@ -6,14 +6,14 @@ public class Team {
     private String teamName;
     private int teamScore;
     private int wicketsFallen;
-    private int totalAvailableBalls;
+    private int totalBallsPlayed;
     private ArrayList <Player> players;
 
-    public Team(String teamName , int totalBalls){
+    public Team(String teamName){
         this.teamName = teamName;
         this.teamScore = 0;
         this.wicketsFallen = 0;
-        this.totalAvailableBalls = totalBalls;
+        this.totalBallsPlayed = 0;
         this.players = new ArrayList<>();
     }
 
@@ -29,6 +29,10 @@ public class Team {
         return wicketsFallen;
     }
 
+    public int getTotalBallsPlayed(){
+        return totalBallsPlayed;
+    }
+
     public void increaseTeamScore(int score) {
         this.teamScore += score;
     }
@@ -37,8 +41,9 @@ public class Team {
         this.wicketsFallen++;
     }
 
-    public void decreaseAvailableBalls(){
-        this.totalAvailableBalls--;
+    public void increaseBallsPlayed(){
+        this.totalBallsPlayed++;
     }
+
 
 }
