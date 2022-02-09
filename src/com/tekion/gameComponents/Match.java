@@ -126,6 +126,9 @@ public class Match {
                 break;
         }
         this.displayScore(team);
+        if(inning == 2){
+            System.out.println(teamFieldingFirst.getTeamName() + " need " + (this.targetScore-teamFieldingFirst.getTeamScore()) + " runs in " + (this.overs * 6 - teamFieldingFirst.getTotalBallsPlayed()) + " balls.");
+        }
     }
 
     private void displayResult(){
