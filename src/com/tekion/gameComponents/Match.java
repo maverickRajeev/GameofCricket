@@ -21,6 +21,7 @@ public class Match {
     public void playMatch(){
         this.setupMatch();
         this.setTeamInfo();
+        this.showTeamInfo();
         this.coinToss();
         this.playFirstInning();
         this.inningsBreak();
@@ -44,8 +45,17 @@ public class Match {
         Scanner sc = new Scanner(System.in);
         System.out.println("\nEnter name of Team-1 : ");
         this.team1 = new Team(sc.nextLine());
+        team1.setPlayersList();
         System.out.println("Enter name of Team-2 : ");
         this.team2 = new Team(sc.nextLine());
+        team2.setPlayersList();
+    }
+
+    private void showTeamInfo(){
+        System.out.println("\n** Team-1 List **");
+        team1.getPlayersList();
+        System.out.println("\n** Team-2 List **");
+        team2.getPlayersList();
     }
 
     private void coinToss() {
