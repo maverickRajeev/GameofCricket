@@ -1,4 +1,4 @@
-package com.tekion.gameComponents;
+package com.tekion.dtos;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -22,6 +22,7 @@ public class Team {
         return teamName;
     }
 
+/*  WEEK-2
     public void setPlayersList(){
         Scanner sc = new Scanner(System.in);
         for(int i = 0 ; i < 11 ; i++){
@@ -35,6 +36,7 @@ public class Team {
             System.out.println(this.players.get(i).getPlayerName());
         }
     }
+*/
 
     public int getTeamScore() {
         return teamScore;

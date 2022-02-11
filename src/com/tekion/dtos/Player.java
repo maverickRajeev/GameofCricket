@@ -1,4 +1,4 @@
-package com.tekion.gameComponents;
+package com.tekion.dtos;
 
 public class Player {
     private String playerName;

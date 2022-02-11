@@ -1,4 +1,6 @@
-package com.tekion;
+package com.tekion.controller;
+
+import com.tekion.service.GameService;
 
 public class GameController {
 
