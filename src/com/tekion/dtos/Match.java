@@ -3,6 +3,7 @@ package com.tekion.dtos;
 import java.util.Scanner;
 import java.util.Random;
 import com.tekion.enums.*;
+import com.tekion.utils.MathCalculations;
 import com.tekion.validator.UserInputValidator;
 
 public class Match {
@@ -14,10 +15,7 @@ public class Match {
     public void playMatch(){
         this.setupMatch();
         this.setTeamInfo();
-/*
-      WEEK-2
-      this.showTeamInfo();
-*/
+        this.showTeamInfo();
         this.coinToss();
         this.playFirstInning();
         this.inningsBreak();
@@ -48,22 +46,23 @@ public class Match {
         this.team1 = new Team(sc.nextLine());
         System.out.println("Enter name of Team-2 : ");
         this.team2 = new Team(sc.nextLine());
-/*
-        WEEK-2
-        team1.setPlayersList();
-        team2.setPlayersList();
-*/
+        System.out.println("Use default names and player roles(Y/N) ? : ");
+        char userInput = sc.next().charAt(0);
+        if(userInput == 'Y'){
+            team1.setDefaultPlayersList();
+            team2.setDefaultPlayersList();
+        }else {
+            team1.setPlayersList();
+            team2.setPlayersList();
+        }
     }
 
-/*
-    WEEK-2
     private void showTeamInfo(){
         System.out.println("\n** Team-1 List **");
         team1.getPlayersList();
         System.out.println("\n** Team-2 List **");
         team2.getPlayersList();
     }
-*/
 
     private void coinToss() {
         System.out.println("\nLet's have a coin toss.");
@@ -117,7 +116,7 @@ public class Match {
     private void playInning(Team team, int inning){
         for(int i = 0 ; i < this.overs ; i++){
             System.out.println("\nOver : " + (i+1));
-            playOver(team , inning);
+            playOver(team , inning , overs);
             if(inning == 2 && team.getTeamScore() >= this.targetScore)
                 break;
             if(team.getWicketsFallen() == 10)
@@ -125,10 +124,13 @@ public class Match {
         }
     }
 
-    private void playOver(Team team , int inning){
-        // numbers 0-6 represent runs , 7 represent wicket
+    private void playOver(Team team , int inning , int matchOvers){
+        int ball;
         for(int i = 0 ; i < 6 ; i++){
-            int ball = new Random().nextInt(8);
+            if(matchOvers == 20)
+                ball = MathCalculations.eachBallScoreT20();
+            else
+                ball = MathCalculations.eachBallScoreODI();
             team.increaseBallsPlayed();
             if(ball == 7){
                 team.fallWicket();
