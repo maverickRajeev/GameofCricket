@@ -3,7 +3,11 @@ package com.tekion.utils;
 import java.util.concurrent.ThreadLocalRandom;
 import com.tekion.constants.RunConstants;
 
-public class MathCalculations {
+public class MatchCalculations {
+
+    public static int coinTossResult(){
+        return ThreadLocalRandom.current().nextInt(1,3);
+    }
 
     public static int eachBallScoreT20(){
         double chance = Math.random();
