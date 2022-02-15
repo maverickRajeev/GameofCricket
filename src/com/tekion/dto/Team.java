@@ -1,4 +1,4 @@
-package com.tekion.dtos;
+package com.tekion.dto;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -6,18 +6,18 @@ import com.tekion.constants.MatchConstants;
 import com.tekion.enums.PlayerRoles;
 
 public class Team {
-    private String teamName;
+    private final String teamName;
     private int teamScore;
     private int wicketsFallen;
     private int totalBallsPlayed;
-    private ArrayList<Player> players;
+    private final ArrayList<Player> players;
 
     public Team(String teamName){
         this.teamName = teamName;
         this.teamScore = 0;
         this.wicketsFallen = 0;
         this.totalBallsPlayed = 0;
-        this.players = new ArrayList<Player>();
+        this.players = new ArrayList<>();
     }
 
     public String getTeamName() {
@@ -28,12 +28,18 @@ public class Team {
         Scanner sc = new Scanner(System.in);
         String name;
         PlayerRoles playerRole;
+        System.out.println("\nEnter Player Details for Team - " + this.getTeamName());
         for(int player = 1 ; player <= MatchConstants.TEAM_SIZE ; player++){
             System.out.println("Enter Player - " + player + " Name : ");
             name = sc.nextLine();
             System.out.println("Enter Player - " + player + " Role(BATSMAN/ALLROUNDER/BOWLER): ");
-            playerRole = PlayerRoles.valueOf(sc.nextLine().toUpperCase());
-            this.players.add(new Player(name , playerRole));
+            try {
+                playerRole = PlayerRoles.valueOf(sc.nextLine().toUpperCase());
+                this.players.add(new Player(name , playerRole));
+            }catch (IllegalArgumentException e){
+                System.out.println("Incorrect Player Role.");
+                System.exit(0);
+            }
         }
     }
 
@@ -42,7 +48,7 @@ public class Team {
         PlayerRoles playerRole;
         for(int player = 1 ; player <= MatchConstants.TEAM_SIZE ; player++){
             playerName = this.getTeamName() + "_Player" + player;
-            if(player <=5)
+            if(player <= 5)
                 playerRole = PlayerRoles.BATSMAN;
             else if(player == 6 || player == 7)
                 playerRole = PlayerRoles.ALLROUNDER;
@@ -52,10 +58,14 @@ public class Team {
         }
     }
 
-    public void getPlayersList(){
+    public void displayPlayersList(){
         for(int player = 0 ; player < MatchConstants.TEAM_SIZE ; player++){
             System.out.println(this.players.get(player).getPlayerName() + " - " + this.players.get(player).getPlayerRole() );
         }
+    }
+
+    public Player getPlayerById(int playerId){
+         return this.players.get(playerId);
     }
 
     public int getTeamScore() {

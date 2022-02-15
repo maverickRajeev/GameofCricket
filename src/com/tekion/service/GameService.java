@@ -1,6 +1,6 @@
 package com.tekion.service;
 
-import com.tekion.dtos.Match;
+import com.tekion.dto.Match;
 
 public class GameService {
 

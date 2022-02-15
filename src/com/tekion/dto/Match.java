@@ -1,15 +1,14 @@
-package com.tekion.dtos;
+package com.tekion.dto;
 
 import java.util.Scanner;
-import java.util.Random;
 import com.tekion.enums.*;
-import com.tekion.utils.MathCalculations;
-import com.tekion.validator.UserInputValidator;
+import com.tekion.utils.MatchCalculations;
 
 public class Match {
     private int overs;
     private Team team1 , team2;
     private Team teamBattingFirst , teamFieldingFirst;
+    private BattingStatus team1Strike , team2Strike;
     private int targetScore = 0;
 
     public void playMatch(){
@@ -27,10 +26,6 @@ public class Match {
         Scanner sc = new Scanner(System.in);
         System.out.println("Please choose match type (T20/0DI): ");
         String userInput = sc.nextLine();
-//        while(!UserInputValidator.matchInputValidator(userInput)){
-//            System.out.println("Incorrect Match type. Please type again.");
-//            userInput = sc.nextLine();
-//        }
         try {
             TypesOfMatch matchType = TypesOfMatch.valueOf(userInput.toUpperCase());
             this.overs = matchType.getMatchType();
@@ -47,26 +42,29 @@ public class Match {
         System.out.println("Enter name of Team-2 : ");
         this.team2 = new Team(sc.nextLine());
         System.out.println("Use default names and player roles(Y/N) ? : ");
-        char userInput = sc.next().charAt(0);
+        char userInput = sc.next().toUpperCase().charAt(0);
         if(userInput == 'Y'){
             team1.setDefaultPlayersList();
             team2.setDefaultPlayersList();
-        }else {
+        }else if(userInput == 'N') {
             team1.setPlayersList();
             team2.setPlayersList();
+        }else{
+            System.out.println("Incorrect choice.");
+            System.exit(0);
         }
     }
 
     private void showTeamInfo(){
         System.out.println("\n** Team-1 List **");
-        team1.getPlayersList();
+        team1.displayPlayersList();
         System.out.println("\n** Team-2 List **");
-        team2.getPlayersList();
+        team2.displayPlayersList();
     }
 
     private void coinToss() {
         System.out.println("\nLet's have a coin toss.");
-        int tossResult = new Random().nextBoolean() ? 1 : 2;
+        int tossResult = MatchCalculations.coinTossResult();
         if (tossResult == 1) {
             System.out.println(team1.getTeamName() + " won the toss. Please choose (BAT/FIELD).");
             chooseBatOrField(team1 , team2);
@@ -97,6 +95,7 @@ public class Match {
 
     private void playFirstInning(){
             System.out.println("\n** Start of 1st inning **");
+            team1Strike = new BattingStatus();
             this.playInning(this.teamBattingFirst , 1);
             this.targetScore = teamBattingFirst.getTeamScore() + 1;
     }
@@ -125,19 +124,19 @@ public class Match {
     }
 
     private void playOver(Team team , int inning , int matchOvers){
-        int ball;
-        for(int i = 0 ; i < 6 ; i++){
+        int ballScore;
+        for(int ball = 0 ; ball < 6 ; ball++){
             if(matchOvers == 20)
-                ball = MathCalculations.eachBallScoreT20();
+                ballScore = MatchCalculations.eachBallScoreT20();
             else
-                ball = MathCalculations.eachBallScoreODI();
+                ballScore = MatchCalculations.eachBallScoreODI();
             team.increaseBallsPlayed();
-            if(ball == 7){
+            if(ballScore == 7){
                 team.fallWicket();
                 System.out.print("W ");
             }else{
-                team.increaseTeamScore(ball);
-                System.out.print(ball + " ");
+                team.increaseTeamScore(ballScore);
+                System.out.print(ballScore + " ");
             }
             if(inning == 2 && team.getTeamScore() >= this.targetScore)
                 break;

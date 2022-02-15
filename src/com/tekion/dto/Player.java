@@ -1,4 +1,4 @@
-package com.tekion.dtos;
+package com.tekion.dto;
 
 import com.tekion.enums.PlayerRoles;
 
@@ -7,6 +7,7 @@ public class Player {
     private int playerScore;
     private int ballsPlayed;
     private int wicketsTaken;
+    private int bowlsBowled;
     private PlayerRoles playerRole;
 
     public Player(String playerName , PlayerRoles playerRole){
@@ -15,6 +16,7 @@ public class Player {
         this.playerScore = 0;
         this.ballsPlayed = 0;
         this.wicketsTaken = 0;
+        this.bowlsBowled = 0;
     }
 
     public String getPlayerName() {
