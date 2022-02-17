@@ -8,7 +8,8 @@ public class BallInfo {
      private Player batsmanOnStrike;
      private Player bowlerBowling;
 
-     public BallInfo(int runScored) {
+     public BallInfo(int runScored , Player batsman) {
+         this.setBatsmanOnStrike(batsman);
          if(runScored != RunConstants.WICKET){
              this.runScored = runScored;
              this.wicketFell = false;
@@ -16,6 +17,7 @@ public class BallInfo {
              this.wicketFell = true;
              this.runScored = 0;
          }
+
      }
 
      public int getRunScored() {
@@ -26,19 +28,21 @@ public class BallInfo {
         return wicketFell;
      }
 
-     public void setBatsmanOnStrike(Player batsman){
-         this.batsmanOnStrike = batsman;
-     }
-
      public Player getBatsmanOnStrike() {
         return batsmanOnStrike;
-     }
-
-     public void setBowlerBowling(Player bowler) {
-        this.bowlerBowling = bowlerBowling;
      }
 
      public Player getBowlerBowling() {
         return bowlerBowling;
      }
+
+     private void setBatsmanOnStrike(Player batsman){
+        this.batsmanOnStrike = batsman;
+     }
+
+     private void setBowlerBowling(Player bowler) {
+        this.bowlerBowling = bowlerBowling;
+     }
+
+
 }
