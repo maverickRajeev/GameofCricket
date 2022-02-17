@@ -1,6 +1,7 @@
 package com.tekion.dto;
 
 import com.tekion.enums.PlayerRoles;
+import com.tekion.enums.PlayerStatus;
 
 public class Player {
     private String playerName;
@@ -9,10 +10,12 @@ public class Player {
     private int wicketsTaken;
     private int bowlsBowled;
     private PlayerRoles playerRole;
+    private PlayerStatus playerStatus;
 
     public Player(String playerName , PlayerRoles playerRole){
         this.playerName = playerName;
         this.playerRole = playerRole;
+        this.playerStatus = PlayerStatus.YET_TO_BAT;
         this.playerScore = 0;
         this.ballsPlayed = 0;
         this.wicketsTaken = 0;
@@ -41,5 +44,13 @@ public class Player {
 
     public void increaseBallsPlayed(){
         this.ballsPlayed++;
+    }
+
+    public void updatePlayerStatus(PlayerStatus playerStatus) {
+        this.playerStatus = playerStatus;
+    }
+
+    public PlayerStatus getPlayerStatus() {
+        return this.playerStatus;
     }
 }

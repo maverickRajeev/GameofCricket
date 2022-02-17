@@ -1,14 +1,15 @@
 package com.tekion.dto;
 
 import java.util.Scanner;
+
+import com.tekion.constants.RunConstants;
 import com.tekion.enums.*;
-import com.tekion.utils.MatchCalculations;
+import com.tekion.utils.MatchCalculationsUtils;
 
 public class Match {
     private int overs;
     private Team team1 , team2;
     private Team teamBattingFirst , teamFieldingFirst;
-    private BattingStatus team1Strike , team2Strike;
     private int targetScore = 0;
 
     public void playMatch(){
@@ -64,7 +65,7 @@ public class Match {
 
     private void coinToss() {
         System.out.println("\nLet's have a coin toss.");
-        int tossResult = MatchCalculations.coinTossResult();
+        int tossResult = MatchCalculationsUtils.coinTossResult();
         if (tossResult == 1) {
             System.out.println(team1.getTeamName() + " won the toss. Please choose (BAT/FIELD).");
             chooseBatOrField(team1 , team2);
@@ -95,7 +96,6 @@ public class Match {
 
     private void playFirstInning(){
             System.out.println("\n** Start of 1st inning **");
-            team1Strike = new BattingStatus();
             this.playInning(this.teamBattingFirst , 1);
             this.targetScore = teamBattingFirst.getTeamScore() + 1;
     }
@@ -110,6 +110,7 @@ public class Match {
     private void playSecondInning(){
         System.out.println("\n** Start of 2nd inning **");
         this.playInning(this.teamFieldingFirst , 2);
+
     }
 
     private void playInning(Team team, int inning){
@@ -126,10 +127,7 @@ public class Match {
     private void playOver(Team team , int inning , int matchOvers){
         int ballScore;
         for(int ball = 0 ; ball < 6 ; ball++){
-            if(matchOvers == 20)
-                ballScore = MatchCalculations.eachBallScoreT20();
-            else
-                ballScore = MatchCalculations.eachBallScoreODI();
+            ballScore = playBall(matchOvers, team);
             team.increaseBallsPlayed();
             if(ballScore == 7){
                 team.fallWicket();
@@ -143,10 +141,29 @@ public class Match {
             if(team.getWicketsFallen() == 10)
                 break;
         }
+        team.getStrikeDetails().changeStrike();
         this.displayScore(team);
         if(inning == 2 && team.getTeamScore() < this.targetScore){
             System.out.println(teamFieldingFirst.getTeamName() + " need " + (this.targetScore-teamFieldingFirst.getTeamScore()) + " runs in " + (this.overs * 6 - teamFieldingFirst.getTotalBallsPlayed()) + " balls.");
         }
+    }
+
+    private int playBall(int matchOvers , Team team){
+        Player currentBatsman = team.getPlayerById(team.getStrikeDetails().getCurrentStrike());
+        int runScored = MatchCalculationsUtils.eachBallScore(matchOvers , currentBatsman);
+        if( runScored == RunConstants.WICKET){
+            currentBatsman.increaseBallsPlayed();
+            currentBatsman.updatePlayerStatus(PlayerStatus.OUT);
+            team.getStrikeDetails().fallOfWicket();
+        }else{
+            currentBatsman.updatePlayerStatus(PlayerStatus.NOT_OUT);
+            currentBatsman.increaseScore(runScored);
+            currentBatsman.increaseBallsPlayed();
+            if(runScored % 2 == 1){
+                team.getStrikeDetails().changeStrike();
+            }
+        }
+        return runScored;
     }
 
     private void displayResult(){
@@ -155,7 +172,12 @@ public class Match {
         this.displayScore(teamFieldingFirst);
 
         int runs1 = teamBattingFirst.getTeamScore();
+        System.out.println("\n" + teamBattingFirst.getTeamName() + " Batting Scorecard \n");
+        teamBattingFirst.displayTeamScorecard();
+
         int runs2 = teamFieldingFirst.getTeamScore();
+        System.out.println("\n" + teamFieldingFirst.getTeamName() + " Batting Scorecard \n");
+        teamFieldingFirst.displayTeamScorecard();
 
         if(runs1 > runs2){
             System.out.println("\n" + teamBattingFirst.getTeamName() + " won by " + (runs1-runs2) + " runs.");
@@ -164,6 +186,8 @@ public class Match {
         }else{
             System.out.println("\nMatch tied.");
         }
+
+
     }
 
     private void displayScore(Team team){
