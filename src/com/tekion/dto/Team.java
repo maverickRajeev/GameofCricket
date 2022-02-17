@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import com.tekion.constants.MatchConstants;
 import com.tekion.enums.PlayerRoles;
+import com.tekion.enums.PlayerStatus;
 
 public class Team {
     private final String teamName;
@@ -11,6 +12,7 @@ public class Team {
     private int wicketsFallen;
     private int totalBallsPlayed;
     private final ArrayList<Player> players;
+    private BattingStatus teamStrike;
 
     public Team(String teamName){
         this.teamName = teamName;
@@ -18,6 +20,7 @@ public class Team {
         this.wicketsFallen = 0;
         this.totalBallsPlayed = 0;
         this.players = new ArrayList<>();
+        this.teamStrike = new BattingStatus();
     }
 
     public String getTeamName() {
@@ -64,8 +67,24 @@ public class Team {
         }
     }
 
+    public void displayTeamScorecard(){
+        for(int player = 0 ; player < MatchConstants.TEAM_SIZE ; player++){
+            Player playerNum = this.players.get(player);
+            if(playerNum.getPlayerStatus() == PlayerStatus.OUT)
+                System.out.println(playerNum.getPlayerName() + " - " + playerNum.getPlayerScore() + "(" + playerNum.getBallsPlayed() +")");
+            else if(playerNum.getPlayerStatus() == PlayerStatus.NOT_OUT)
+                System.out.println(playerNum.getPlayerName() + " - " + playerNum.getPlayerScore() + "(" + playerNum.getBallsPlayed() +")" + " NOT OUT");
+            else
+                System.out.println(playerNum.getPlayerName() + " - " + "YET TO BAT");
+        }
+    }
+
     public Player getPlayerById(int playerId){
          return this.players.get(playerId);
+    }
+
+    public BattingStatus getStrikeDetails(){
+        return this.teamStrike;
     }
 
     public int getTeamScore() {
