@@ -12,31 +12,21 @@ public class Match {
     private Team teamBattingFirst , teamFieldingFirst;
     private int targetScore = 0;
 
-    public void playMatch(){
-        this.setupMatch();
-        this.setTeamInfo();
-        this.showTeamInfo();
-        this.coinToss();
-        this.playFirstInning();
-        this.inningsBreak();
-        this.playSecondInning();
-        this.displayResult();
-    }
-
-    private void setupMatch(){
+    public void setupMatch(ScoreBoard scoreBoard){
         Scanner sc = new Scanner(System.in);
         System.out.println("Please choose match type (T20/0DI): ");
         String userInput = sc.nextLine();
         try {
             TypesOfMatch matchType = TypesOfMatch.valueOf(userInput.toUpperCase());
             this.overs = matchType.getMatchType();
+            scoreBoard.setScoreBoard(this.overs);
         }catch (IllegalArgumentException e){
             System.out.println("Incorrect Match Type.");
             System.exit(0);
         }
     }
 
-    private void setTeamInfo(){
+    public void setTeamInfo(){
         Scanner sc = new Scanner(System.in);
         System.out.println("\nEnter name of Team-1 : ");
         this.team1 = new Team(sc.nextLine());
@@ -56,14 +46,14 @@ public class Match {
         }
     }
 
-    private void showTeamInfo(){
+    public void showTeamInfo(){
         System.out.println("\n** Team-1 List **");
         team1.displayPlayersList();
         System.out.println("\n** Team-2 List **");
         team2.displayPlayersList();
     }
 
-    private void coinToss() {
+    public void coinToss() {
         System.out.println("\nLet's have a coin toss.");
         int tossResult = MatchCalculationsUtils.coinTossResult();
         if (tossResult == 1) {
@@ -75,7 +65,7 @@ public class Match {
         }
     }
 
-    private void chooseBatOrField(Team tossWinner , Team tossLoser){
+    public void chooseBatOrField(Team tossWinner , Team tossLoser){
         Scanner sc = new Scanner(System.in);
         String userInput = sc.nextLine();
         try {
@@ -94,26 +84,26 @@ public class Match {
         }
     }
 
-    private void playFirstInning(){
+    public void playFirstInning(){
             System.out.println("\n** Start of 1st inning **");
             this.playInning(this.teamBattingFirst , 1);
             this.targetScore = teamBattingFirst.getTeamScore() + 1;
     }
 
-    private void inningsBreak(){
+    public void inningsBreak(){
         System.out.println("\n** Innings break **");
         this.displayScore(teamBattingFirst);
         System.out.println("Target : " + this.targetScore);
         System.out.println(teamFieldingFirst.getTeamName() + " need " + this.targetScore + " runs in " + this.overs * 6 + " balls.");
     }
 
-    private void playSecondInning(){
+    public void playSecondInning(){
         System.out.println("\n** Start of 2nd inning **");
         this.playInning(this.teamFieldingFirst , 2);
 
     }
 
-    private void playInning(Team team, int inning){
+    public void playInning(Team team, int inning){
         for(int i = 0 ; i < this.overs ; i++){
             System.out.println("\nOver : " + (i+1));
             playOver(team , inning , overs);
@@ -124,7 +114,7 @@ public class Match {
         }
     }
 
-    private void playOver(Team team , int inning , int matchOvers){
+    public void playOver(Team team , int inning , int matchOvers){
         int ballScore;
         for(int ball = 0 ; ball < 6 ; ball++){
             ballScore = playBall(matchOvers, team);
@@ -148,7 +138,7 @@ public class Match {
         }
     }
 
-    private int playBall(int matchOvers , Team team){
+    public int playBall(int matchOvers , Team team){
         Player currentBatsman = team.getPlayerById(team.getStrikeDetails().getCurrentStrike());
         int runScored = MatchCalculationsUtils.eachBallScore(matchOvers , currentBatsman);
         if( runScored == RunConstants.WICKET){
@@ -166,7 +156,7 @@ public class Match {
         return runScored;
     }
 
-    private void displayResult(){
+    public void displayResult(){
         System.out.println("\n** Match Result **");
         this.displayScore(teamBattingFirst);
         this.displayScore(teamFieldingFirst);
@@ -190,7 +180,7 @@ public class Match {
 
     }
 
-    private void displayScore(Team team){
+    public void displayScore(Team team){
         System.out.printf("\n%s: %d/%d (%d.%d Overs)%n",
                 team.getTeamName(),
                 team.getTeamScore(),

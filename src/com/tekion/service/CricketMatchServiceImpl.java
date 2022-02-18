@@ -1,13 +1,27 @@
 package com.tekion.service;
 
 import com.tekion.dto.Match;
+import com.tekion.dto.ScoreBoard;
 
 public class CricketMatchServiceImpl implements CricketMatchService{
-    ScoreBoardService scoreBoard = new ScoreBoardServiceImpl();
+    ScoreBoardService scoreBoardService = new ScoreBoardServiceImpl();
 
-    public void playCricketMatch(){
+    public void startCricketMatch(){
         Match cricketGame = new Match();
-        cricketGame.playMatch();
+        ScoreBoard scoreBoard = new ScoreBoard();
+        this.playMatch(cricketGame , scoreBoard);
+    }
+
+
+    private void playMatch(Match cricketMatch , ScoreBoard scoreBoard){
+        cricketMatch.setupMatch(scoreBoard);
+        cricketMatch.setTeamInfo();
+        cricketMatch.showTeamInfo();
+        cricketMatch.coinToss();
+        cricketMatch.playFirstInning();
+        cricketMatch.inningsBreak();
+        cricketMatch.playSecondInning();
+        cricketMatch.displayResult();
     }
 
 }

@@ -8,6 +8,6 @@ public class GameController {
 
     public static void main(String[] args){
         CricketMatchService cricketMatch = new CricketMatchServiceImpl();
-        cricketMatch.playCricketMatch();
+        cricketMatch.startCricketMatch();
     }
 }

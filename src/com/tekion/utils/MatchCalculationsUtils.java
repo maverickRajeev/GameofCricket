@@ -13,18 +13,26 @@ public class MatchCalculationsUtils {
 
     public static int eachBallScore(int matchOvers , Player batsMan){
           if(matchOvers == 20){
-              if ((batsMan.getPlayerRole() == PlayerRoles.BATSMAN) || (batsMan.getPlayerRole() == PlayerRoles.ALLROUNDER)){
-                   return eachBallScoreT20BatsmanAllRounder();
-              }else{
-                  return eachBallScoreT20Bowler();
-              }
+              return eachBallScoreT20(batsMan);
           }else{
-              if((batsMan.getPlayerRole() == PlayerRoles.BATSMAN) || (batsMan.getPlayerRole() == PlayerRoles.ALLROUNDER)) {
-                  return eachBallScoreODIBatsmanAllRounder();
-              }else {
-                  return eachBallScoreODIBowler();
-              }
+              return eachBallScoreODI(batsMan);
           }
+    }
+
+    private static int eachBallScoreT20(Player batsMan){
+        if ((batsMan.getPlayerRole() == PlayerRoles.BATSMAN) || (batsMan.getPlayerRole() == PlayerRoles.ALLROUNDER)){
+            return eachBallScoreT20BatsmanAllRounder();
+        }else{
+            return eachBallScoreT20Bowler();
+        }
+    }
+
+    private static int eachBallScoreODI(Player batsMan){
+        if((batsMan.getPlayerRole() == PlayerRoles.BATSMAN) || (batsMan.getPlayerRole() == PlayerRoles.ALLROUNDER)) {
+            return eachBallScoreODIBatsmanAllRounder();
+        }else {
+            return eachBallScoreODIBowler();
+        }
     }
 
     private static int eachBallScoreT20BatsmanAllRounder(){
