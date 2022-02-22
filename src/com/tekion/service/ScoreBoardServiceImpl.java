@@ -6,17 +6,18 @@ import com.tekion.dto.ScoreBoard;
 import com.tekion.dto.Team;
 
 public class ScoreBoardServiceImpl implements ScoreBoardService {
+    ScoreBoard scoreBoard = new ScoreBoard();
 
     public void displayScoreBoard(){
 
     }
 
-    public void setPlayingTeams(ScoreBoard scoreBoard , Team teamBattingFirst , Team teamFieldingFirst){
+    public void setPlayingTeams(Team teamBattingFirst , Team teamFieldingFirst){
         scoreBoard.setTeamBattingFirst(teamBattingFirst);
         scoreBoard.setTeamFieldingFirst(teamFieldingFirst);
     }
 
-    public void updateScore(ScoreBoard scoreBoard , int ballScore , int inning){
+    public void updateScore(int ballScore , int inning){
         if(inning == MatchConstants.FIRST_INNING)
             updateScoreFirstInning(scoreBoard , ballScore);
         else

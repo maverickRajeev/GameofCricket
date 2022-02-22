@@ -12,76 +12,28 @@ public class Match {
     private Team teamBattingFirst , teamFieldingFirst;
     private int targetScore = 0;
 
-    public void setupMatch(ScoreBoard scoreBoard){
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Please choose match type (T20/0DI): ");
-        String userInput = sc.nextLine();
-        try {
-            TypesOfMatch matchType = TypesOfMatch.valueOf(userInput.toUpperCase());
-            this.overs = matchType.getMatchType();
-            scoreBoard.setScoreBoard(this.overs);
-        }catch (IllegalArgumentException e){
-            System.out.println("Incorrect Match Type.");
-            System.exit(0);
-        }
+    public void setMatchOvers(int numberOfOvers){
+        this.overs = numberOfOvers;
     }
 
-    public void setTeamInfo(){
-        Scanner sc = new Scanner(System.in);
-        System.out.println("\nEnter name of Team-1 : ");
-        this.team1 = new Team(sc.nextLine());
-        System.out.println("Enter name of Team-2 : ");
-        this.team2 = new Team(sc.nextLine());
-        System.out.println("Use default names and player roles(Y/N) ? : ");
-        char userInput = sc.next().toUpperCase().charAt(0);
-        if(userInput == 'Y'){
-            team1.setDefaultPlayersList();
-            team2.setDefaultPlayersList();
-        }else if(userInput == 'N') {
-            team1.setPlayersList();
-            team2.setPlayersList();
-        }else{
-            System.out.println("Incorrect choice.");
-            System.exit(0);
-        }
+    public int getMatchOvers(){
+        return this.overs;
     }
 
-    public void showTeamInfo(){
-        System.out.println("\n** Team-1 List **");
-        team1.displayPlayersList();
-        System.out.println("\n** Team-2 List **");
-        team2.displayPlayersList();
+    public void setTeam1(Team team1){
+        this.team1 = team1;
     }
 
-    public void coinToss() {
-        System.out.println("\nLet's have a coin toss.");
-        int tossResult = MatchCalculationsUtils.coinTossResult();
-        if (tossResult == 1) {
-            System.out.println(team1.getTeamName() + " won the toss. Please choose (BAT/FIELD).");
-            chooseBatOrField(team1 , team2);
-        } else {
-            System.out.println(team2.getTeamName() + " won the toss. Please choose (BAT/FIELD).");
-            chooseBatOrField(team2 , team1);
-        }
+    public void setTeam2(Team team2){
+        this.team2 = team2;
     }
 
-    public void chooseBatOrField(Team tossWinner , Team tossLoser){
-        Scanner sc = new Scanner(System.in);
-        String userInput = sc.nextLine();
-        try {
-            TossChoices tossChoice = TossChoices.valueOf(userInput.toUpperCase());
-            if(tossChoice.choseBatting()){
-                this.teamBattingFirst = tossWinner;
-                this.teamFieldingFirst = tossLoser;
-            }else{
-                this.teamBattingFirst = tossLoser;
-                this.teamFieldingFirst = tossWinner;
-            }
-            System.out.println(tossWinner.getTeamName() + " chose to " + tossChoice + " first." );
-        }catch (IllegalArgumentException e){
-            System.out.println("Incorrect choice made.");
-            System.exit(0);
-        }
+    public Team getTeam1(){
+        return this.team1;
+    }
+
+    public Team getTeam2(){
+        return this.team2;
     }
 
     public void playFirstInning(){

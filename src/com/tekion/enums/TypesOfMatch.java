@@ -10,7 +10,7 @@ public enum TypesOfMatch {
         this.matchOvers = matchOvers;
     }
 
-    public int getMatchType(){
+    public int getOversForMatchType(){
         return this.matchOvers;
     }
 }

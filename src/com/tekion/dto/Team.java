@@ -87,28 +87,27 @@ public class Team {
         return this.teamStrike;
     }
 
-    public int getTeamScore() {
-        return this.teamScore;
-    }
-
-    public int getWicketsFallen() {
-        return this.wicketsFallen;
-    }
-
-    public int getTotalBallsPlayed(){
-        return this.totalBallsPlayed;
-    }
-
     public void increaseTeamScore(int score) {
         this.teamScore += score;
+    }
+
+    public int getTeamScore() {
+        return this.teamScore;
     }
 
     public void fallWicket(){
         this.wicketsFallen++;
     }
 
+    public int getWicketsFallen() {
+        return this.wicketsFallen;
+    }
+
     public void increaseBallsPlayed(){
         this.totalBallsPlayed++;
+    }
+    public int getTotalBallsPlayed(){
+        return this.totalBallsPlayed;
     }
 
 }
