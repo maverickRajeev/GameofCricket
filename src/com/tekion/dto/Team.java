@@ -8,17 +8,11 @@ import com.tekion.enums.PlayerStatus;
 
 public class Team {
     private final String teamName;
-    private int teamScore;
-    private int wicketsFallen;
-    private int totalBallsPlayed;
     private final ArrayList<Player> players;
     private BattingStatus teamStrike;
 
     public Team(String teamName){
         this.teamName = teamName;
-        this.teamScore = 0;
-        this.wicketsFallen = 0;
-        this.totalBallsPlayed = 0;
         this.players = new ArrayList<>();
         this.teamStrike = new BattingStatus();
     }
@@ -45,20 +39,29 @@ public class Team {
             }
         }
     }
-
-    public void setDefaultPlayersList(){
-        String playerName;
+    public void addPlayer(String playerName){
+        Scanner sc = new Scanner(System.in);
         PlayerRoles playerRole;
-        for(int player = 1 ; player <= MatchConstants.TEAM_SIZE ; player++){
-            playerName = this.getTeamName() + "_Player" + player;
-            if(player <= 5)
-                playerRole = PlayerRoles.BATSMAN;
-            else if(player == 6 || player == 7)
-                playerRole = PlayerRoles.ALLROUNDER;
-            else
-                playerRole = PlayerRoles.BOWLER;
+        System.out.println("Enter Player - " + playerName + " Role(BATSMAN/ALLROUNDER/BOWLER): ");
+        try {
+            playerRole = PlayerRoles.valueOf(sc.nextLine().toUpperCase());
             this.players.add(new Player(playerName , playerRole));
+        }catch (IllegalArgumentException e){
+            System.out.println("Incorrect Player Role.");
+            System.exit(0);
         }
+    }
+
+    public void addDefaultPlayer(int playerNumber , String playerName){
+        PlayerRoles playerRole;
+        if(playerNumber <= 5)
+            playerRole = PlayerRoles.BATSMAN;
+        else if(playerNumber == 6 || playerNumber == 7)
+            playerRole = PlayerRoles.ALLROUNDER;
+        else
+            playerRole = PlayerRoles.BOWLER;
+
+        this.players.add(new Player(playerName , playerRole));
     }
 
     public void displayPlayersList(){
@@ -83,31 +86,15 @@ public class Team {
          return this.players.get(playerId);
     }
 
-    public BattingStatus getStrikeDetails(){
-        return this.teamStrike;
+    public Player getCurrentBatsMan(){
+        return this.getPlayerById(this.teamStrike.getCurrentStrike());
     }
 
-    public void increaseTeamScore(int score) {
-        this.teamScore += score;
+    public void changeTeamStrike(){
+        this.teamStrike.changeStrike();
     }
 
-    public int getTeamScore() {
-        return this.teamScore;
+    public void newPlayerChange(){
+        this.teamStrike.fallOfWicket();
     }
-
-    public void fallWicket(){
-        this.wicketsFallen++;
-    }
-
-    public int getWicketsFallen() {
-        return this.wicketsFallen;
-    }
-
-    public void increaseBallsPlayed(){
-        this.totalBallsPlayed++;
-    }
-    public int getTotalBallsPlayed(){
-        return this.totalBallsPlayed;
-    }
-
 }
