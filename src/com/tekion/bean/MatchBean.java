@@ -1,9 +1,15 @@
 package com.tekion.bean;
 
-import com.tekion.dto.Match;
+import java.util.Date;
 
-import java.sql.*;
+public class MatchBean {
 
-public interface MatchBean {
-    void getMatchDetails();
+    private int matchId;
+    private int team1Id;
+    private int team2Id;
+    private int matchType;
+    private Date matchStartTime;
+    private int scoreBoardId;
+    private int matchResultId;
+
 }
