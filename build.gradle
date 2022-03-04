@@ -23,6 +23,11 @@ repositories {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
 	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'nl.tritales.springrestdoc:springrestdoc:0.1.0'
+	implementation 'com.spt-development:spt-development-logging-spring:2.0.2'
+	implementation 'com.github.magrifle:data-search-api:2.0.5'
+	implementation 'com.github.salemebo:restful-api:0.2.8'
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'mysql:mysql-connector-java'
 	annotationProcessor 'org.projectlombok:lombok'

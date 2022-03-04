@@ -1,7 +1,7 @@
 package com.tekion.cricketGame.utils;
 
 import com.tekion.cricketGame.constants.RunConstants;
-import com.tekion.cricketGame.dto.PlayerDto;
+import com.tekion.cricketGame.playerService.dto.PlayerDto;
 import com.tekion.cricketGame.enums.PlayerRoles;
 
 import java.util.concurrent.ThreadLocalRandom;
