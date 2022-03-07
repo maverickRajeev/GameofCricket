@@ -1,9 +1,12 @@
 package com.tekion.cricketGame.scoreBoardService;
 
+import com.tekion.cricketGame.scoreBoardService.dto.ScoreBoardDto;
 import com.tekion.cricketGame.teamService.dto.TeamDto;
+import org.springframework.stereotype.Service;
 
+@Service
 public interface ScoreBoardService {
-    void setScoreBoard(int matchOvers);
+    void setScoreBoard(ScoreBoardDto scoreBoard , int matchOvers);
     void displayScoreBoard(int inning);
     void setPlayingTeams(TeamDto teamBattingFirst , TeamDto teamFieldingFirst);
     TeamDto getTeamBattingFirst();

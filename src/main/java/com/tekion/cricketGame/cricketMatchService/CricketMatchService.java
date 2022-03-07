@@ -4,5 +4,5 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface CricketMatchService {
-    void startCricketMatch();
+    void startCricketMatch(int numberOfOvers , int numberOfMatches , String team1Name , String team2Name);
 }

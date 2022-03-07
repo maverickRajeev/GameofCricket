@@ -1,8 +1,8 @@
 package com.tekion.cricketGame.enums;
 
 public enum TossChoices {
-    BAT("Batting"),
-    FIELD("Fielding");
+    BAT("BAT"),
+    FIELD("FIELD");
 
     private final String tChoice;
 
@@ -11,6 +11,6 @@ public enum TossChoices {
     }
 
     public Boolean choseBatting(){
-        return this.tChoice.equals("Batting");
+        return this.tChoice.equals("BAT");
     }
 }

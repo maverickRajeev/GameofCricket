@@ -2,7 +2,7 @@ package com.tekion.cricketGame.cricketMatchService.dto;
 
 import com.tekion.cricketGame.teamService.dto.TeamDto;
 
-public class MatchDto {
+public class CricketMatchDto {
     private int overs;
     private TeamDto team1 , team2;
 

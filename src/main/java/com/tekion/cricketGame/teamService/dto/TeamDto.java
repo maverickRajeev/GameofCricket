@@ -1,10 +1,9 @@
 package com.tekion.cricketGame.teamService.dto;
 
-import com.tekion.cricketGame.constants.MatchConstants;
-import com.tekion.cricketGame.dto.BattingStatusDto;
-import com.tekion.cricketGame.playerService.dto.PlayerDto;
 import com.tekion.cricketGame.enums.PlayerRoles;
 import com.tekion.cricketGame.enums.PlayerStatus;
+import com.tekion.cricketGame.constants.MatchConstants;
+import com.tekion.cricketGame.playerService.dto.PlayerDto;
 
 import java.util.ArrayList;
 import java.util.Scanner;

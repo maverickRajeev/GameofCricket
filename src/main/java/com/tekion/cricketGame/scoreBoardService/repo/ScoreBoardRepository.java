@@ -1,5 +1,9 @@
 package com.tekion.cricketGame.scoreBoardService.repo;
 
-public interface ScoreBoardRepository {
+import com.tekion.cricketGame.scoreBoardService.bean.MatchScoreBoardBean;
+import org.springframework.stereotype.Repository;
 
+@Repository
+public interface ScoreBoardRepository {
+    void createScoreBoard(MatchScoreBoardBean scoreBoardBean);
 }

@@ -1,4 +1,4 @@
-package com.tekion.cricketGame.dto;
+package com.tekion.cricketGame.teamService.dto;
 
 import static java.lang.Math.max;
 

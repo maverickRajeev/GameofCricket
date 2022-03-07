@@ -33,12 +33,12 @@ public class CricketSeriesBean {
      private int numberOfMatchesTied;
 
      @Column("createdTime")
-     private Long createdTime;
+     private long createdTime;
 
      @Column("modifiedTime")
-     private Long modifiedTime;
+     private long modifiedTime;
 
      @Column("isDeleted")
-     private Boolean isDeleted;
+     private boolean isDeleted;
 
 }

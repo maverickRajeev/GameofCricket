@@ -4,12 +4,13 @@ import com.tekion.cricketGame.constants.MatchConstants;
 import com.tekion.cricketGame.constants.RunConstants;
 import com.tekion.cricketGame.scoreBoardService.dto.ScoreBoardDto;
 import com.tekion.cricketGame.teamService.dto.TeamDto;
+import org.springframework.stereotype.Service;
 
+@Service
 public class ScoreBoardServiceImpl implements ScoreBoardService {
-    ScoreBoardDto scoreBoard;
 
-    public void setScoreBoard(int matchOvers){
-        scoreBoard = new ScoreBoardDto(matchOvers);
+    public void setScoreBoard(ScoreBoardDto scoreBoard , int matchOvers){
+
     }
 
     public void displayScoreBoard(int inning){
@@ -19,12 +20,6 @@ public class ScoreBoardServiceImpl implements ScoreBoardService {
             displayScoreSecondInning();
          }
     }
-
-//    public void displayPerBallScoreboard(int inning){
-//        if(inning == MatchConstants.FIRST_INNING){
-//            scoreBoard.firstInningTotalBallsInfo.get(scoreBoard.getFirstInningBallsCompleted());
-//        }
-//    }
 
     public void setPlayingTeams(TeamDto teamBattingFirst , TeamDto teamFieldingFirst){
         scoreBoard.setTeamBattingFirst(teamBattingFirst);

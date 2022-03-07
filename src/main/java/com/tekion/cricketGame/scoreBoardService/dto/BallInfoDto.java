@@ -1,4 +1,4 @@
-package com.tekion.cricketGame.dto;
+package com.tekion.cricketGame.scoreBoardService.dto;
 
 import com.tekion.cricketGame.constants.RunConstants;
 import com.tekion.cricketGame.playerService.dto.PlayerDto;

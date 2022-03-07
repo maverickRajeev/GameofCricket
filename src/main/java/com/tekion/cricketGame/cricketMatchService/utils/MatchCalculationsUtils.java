@@ -1,8 +1,8 @@
-package com.tekion.cricketGame.utils;
+package com.tekion.cricketGame.cricketMatchService.utils;
 
 import com.tekion.cricketGame.constants.RunConstants;
-import com.tekion.cricketGame.playerService.dto.PlayerDto;
 import com.tekion.cricketGame.enums.PlayerRoles;
+import com.tekion.cricketGame.playerService.dto.PlayerDto;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -11,6 +11,8 @@ public class MatchCalculationsUtils {
     public static int coinTossResult(){
         return ThreadLocalRandom.current().nextInt(1,3);
     }
+
+    public static int tossChoice() {return ThreadLocalRandom.current().nextInt(1 , 3);}
 
     public static int eachBallScore(int matchOvers , PlayerDto batsMan){
           if(matchOvers == 20){

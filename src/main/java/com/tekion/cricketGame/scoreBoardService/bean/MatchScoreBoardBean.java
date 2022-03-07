@@ -11,6 +11,9 @@ public class MatchScoreBoardBean {
       @Column("scoreBoardId")
       private int scoreBoardId;
 
+      @Column("matchId")
+      private int matchId;
+
       @Column("teamBattingFirstId")
       private int teamBattingFirstId;
 

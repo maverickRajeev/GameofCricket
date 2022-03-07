@@ -1,13 +1,13 @@
 package com.tekion.cricketGame.cricketSeriesService;
 
 import com.tekion.cricketGame.cricketMatchService.CricketMatchService;
+import com.tekion.cricketGame.cricketSeriesService.dto.CricketSeriesDto;
+import com.tekion.cricketGame.cricketSeriesService.dto.SeriesRequestDto;
 import com.tekion.cricketGame.cricketSeriesService.repo.CricketSeriesRepo;
-import com.tekion.cricketGame.enums.TypesOfMatch;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import java.util.Scanner;
-
-
+@Service
 public class CricketSeriesServiceImpl implements CricketSeriesService {
 
     private final CricketSeriesRepo cricketSeriesRepo;
@@ -20,40 +20,17 @@ public class CricketSeriesServiceImpl implements CricketSeriesService {
     }
 
     @Override
-    public void beginSeries() {
-        Scanner sc = new Scanner(System.in);
-        int matchOvers = this.chooseSeriesType(sc);
-        int numberOfMatches = this.setNumberOfMatches(sc);
-        this.startSeries();
-        cricketMatch.startCricketMatch();
+    public void beginSeries(SeriesRequestDto newSeries) {
+        int matchOvers = newSeries.getOvers();
+        int numberOfMatches = newSeries.getNumberOfMatches();
+        CricketSeriesDto cricketSeries = new CricketSeriesDto(matchOvers ,  numberOfMatches);
+        this.playSeries(matchOvers , numberOfMatches , newSeries.getTeam1Name() , newSeries.getTeam2Name());
     }
 
-    private int chooseSeriesType(Scanner sc){
-        sc = new Scanner(System.in);
-        System.out.println("Please choose match type for the series (T20/0DI): ");
-        String userInputSeriesType = sc.nextLine();
-        TypesOfMatch matchType = null;
-        try {
-            matchType = TypesOfMatch.valueOf(userInputSeriesType.toUpperCase());
-        }catch (IllegalArgumentException e) {
-            System.out.println("Incorrect Match Type.");
-            System.exit(0);
-        }
-        return matchType.getOversForMatchType();;
-    }
-
-    private int setNumberOfMatches(Scanner sc){
-        System.out.println("Please input number of matches : ");
-        int userInputNumberOfMatches = sc.nextInt();
-        try{
-
-        }catch{
-
-        }
-    }
-
-    private void startSeries(){
-
+    private void playSeries(int matchOvers , int numberOfMatches , String team1Name , String team2Name){
+         for(int i = 0 ; i < numberOfMatches ; i++){
+             cricketMatchService.startCricketMatch(matchOvers , numberOfMatches , team1Name , team2Name);
+         }
     }
 
 }

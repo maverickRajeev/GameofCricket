@@ -2,122 +2,101 @@ package com.tekion.cricketGame.cricketMatchService;
 
 import com.tekion.cricketGame.constants.MatchConstants;
 import com.tekion.cricketGame.constants.RunConstants;
-import com.tekion.cricketGame.cricketMatchService.dto.MatchDto;
-import com.tekion.cricketGame.playerService.dto.PlayerDto;
-import com.tekion.cricketGame.teamService.dto.TeamDto;
+import com.tekion.cricketGame.cricketMatchService.dto.CricketMatchDto;
+import com.tekion.cricketGame.cricketMatchService.repo.CricketMatchRepo;
 import com.tekion.cricketGame.enums.PlayerStatus;
 import com.tekion.cricketGame.enums.TossChoices;
-import com.tekion.cricketGame.enums.TypesOfMatch;
-import com.tekion.cricketGame.cricketMatchService.repo.MatchRepository;
-import com.tekion.cricketGame.cricketMatchService.repo.MatchRepositoryImpl;
+import com.tekion.cricketGame.playerService.dto.PlayerDto;
 import com.tekion.cricketGame.scoreBoardService.ScoreBoardService;
-import com.tekion.cricketGame.scoreBoardService.ScoreBoardServiceImpl;
+import com.tekion.cricketGame.scoreBoardService.dto.ScoreBoardDto;
 import com.tekion.cricketGame.teamService.TeamService;
-import com.tekion.cricketGame.teamService.TeamServiceImpl;
-import com.tekion.cricketGame.utils.MatchCalculationsUtils;
+import com.tekion.cricketGame.teamService.dto.TeamDto;
+import com.tekion.cricketGame.cricketMatchService.utils.MatchCalculationsUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import java.util.Scanner;
-
+@Service
 public class CricketMatchServiceImpl implements CricketMatchService {
-    MatchDto cricketGame = new MatchDto();
-    TeamService teamService = new TeamServiceImpl();
-    ScoreBoardService scoreBoardService = new ScoreBoardServiceImpl();
-    MatchRepository matchRepo = new MatchRepositoryImpl();
 
+    private final TeamService teamService;
+    private final ScoreBoardService scoreBoardService;
+    private final CricketMatchRepo cricketMatchRepo;
 
-    public void startCricketMatch(){
-        this.setupMatch();
-        this.setTeamInfo();
-        this.showTeamInfo();
-        this.playMatch();
+    @Autowired
+    public CricketMatchServiceImpl(TeamService teamService , ScoreBoardService scoreBoardService , CricketMatchRepo cricketMatchRepo){
+        this.teamService = teamService;
+        this.scoreBoardService = scoreBoardService;
+        this.cricketMatchRepo = cricketMatchRepo;
     }
 
-    private void playMatch(){
-        this.coinToss();
-        this.playFirstInning();
-        this.inningsBreak();
-        this.playSecondInning();
+    public void startCricketMatch(int numberOfOvers , int numberOfMatches , String team1Name , String team2Name){
+        CricketMatchDto cricketGame = new CricketMatchDto();
+        ScoreBoardDto scoreBoard = new ScoreBoardDto(numberOfOvers);
+        this.setupMatch(cricketGame , numberOfOvers);
+        this.setTeamInfo(cricketGame , team1Name , team2Name);
+        this.playMatch(cricketGame , scoreBoard);
+    }
+
+    private void playMatch(CricketMatchDto cricketGame , ScoreBoardDto scoreBoard){
+        this.coinToss(cricketGame);
+        this.playFirstInning(cricketGame);
+        this.inningsBreak(cricketGame);
+        this.playSecondInning(cricketGame);
 //        this.displayResult();
     }
 
-    private void setupMatch(){
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Please choose match type (T20/0DI): ");
-        String userInputMatchType = sc.nextLine();
-        try {
-             TypesOfMatch matchType = TypesOfMatch.valueOf(userInputMatchType.toUpperCase());
-             cricketGame.setMatchOvers(matchType.getOversForMatchType());
+    private void setupMatch(CricketMatchDto cricketGame , int overs){
+             cricketGame.setMatchOvers(overs);
              scoreBoardService.setScoreBoard(cricketGame.getMatchOvers());
-        }catch (IllegalArgumentException e) {
-            System.out.println("Incorrect Match Type.");
-            System.exit(0);
-        }
     }
 
-    private void setTeamInfo() {
-        cricketGame.setTeam1(new TeamDto(teamService.inputTeam1Details()));
-        cricketGame.setTeam2(new TeamDto(teamService.inputTeam2Details()));
+    private void setTeamInfo(CricketMatchDto cricketGame , String team1Name , String team2Name) {
+        cricketGame.setTeam1(new TeamDto(teamService.loadTeamDetails(team1Name)));
+        cricketGame.setTeam2(new TeamDto(teamService.loadTeamDetails(team2Name)));
         teamService.setPlayerDetails(cricketGame);
     }
 
-
-    private void showTeamInfo(){
-        System.out.println("\n** Team-1 List **");
-        cricketGame.getTeam1().displayPlayersList();
-        System.out.println("\n** Team-2 List **");
-        cricketGame.getTeam2().displayPlayersList();
-    }
-
-    private void coinToss(){
-        System.out.println("\nLet's have a coin toss.");
+    private void coinToss(CricketMatchDto cricketGame){
         int tossResult = MatchCalculationsUtils.coinTossResult();
         if (tossResult == 1) {
-            System.out.println(cricketGame.getTeam1().getTeamName() + " won the toss. Please choose (BAT/FIELD).");
             chooseBatOrField(cricketGame.getTeam1() , cricketGame.getTeam2());
         } else {
-            System.out.println(cricketGame.getTeam2().getTeamName() + " won the toss. Please choose (BAT/FIELD).");
             chooseBatOrField(cricketGame.getTeam2() , cricketGame.getTeam1());
         }
     }
 
     private void chooseBatOrField(TeamDto tossWinner , TeamDto tossLoser){
-        Scanner sc = new Scanner(System.in);
-        String userInput = sc.nextLine();
-        try {
-            TossChoices tossChoice = TossChoices.valueOf(userInput.toUpperCase());
-            if(tossChoice.choseBatting()){
-                scoreBoardService.setPlayingTeams(tossWinner , tossLoser);
-            }else{
-                scoreBoardService.setPlayingTeams(tossLoser , tossWinner);
-            }
-            System.out.println(tossWinner.getTeamName() + " chose to " + tossChoice + " first." );
-        }catch (IllegalArgumentException e){
-            System.out.println("Incorrect choice made.");
-            System.exit(0);
+        String autoTossChoice = MatchCalculationsUtils.tossChoice() == 1 ? "BAT" : "FIELD";
+        TossChoices tossChoice = TossChoices.valueOf(autoTossChoice);
+
+        if(tossChoice.choseBatting()){
+            scoreBoardService.setPlayingTeams(tossWinner , tossLoser);
+        }else{
+            scoreBoardService.setPlayingTeams(tossLoser , tossWinner);
         }
     }
 
-    private void playFirstInning(){
+    private void playFirstInning(CricketMatchDto cricketGame){
         System.out.println("\n** Start of 1st inning **");
-        this.playInning(MatchConstants.FIRST_INNING , scoreBoardService.getTeamBattingFirst());
+        this.playInning(cricketGame ,MatchConstants.FIRST_INNING , scoreBoardService.getTeamBattingFirst());
         scoreBoardService.updateTargetScore();
         scoreBoardService.getTeamBattingFirst().displayTeamScorecard();
     }
 
-    private void inningsBreak(){
+    private void inningsBreak(CricketMatchDto cricketGame){
         System.out.println("\n** Innings break **");
         scoreBoardService.displayScoreBoard(MatchConstants.FIRST_INNING);
         System.out.println("Target : " + scoreBoardService.getTargetScore());
         System.out.println(scoreBoardService.getTeamFieldingFirst().getTeamName() + " need " + scoreBoardService.getTargetScore() + " runs in " + cricketGame.getMatchOvers() * 6 + " balls.");
     }
 
-    private void playSecondInning(){
+    private void playSecondInning(CricketMatchDto cricketGame){
         System.out.println("\n** Start of 2nd inning **");
-        this.playInning(MatchConstants.SECOND_INNING , scoreBoardService.getTeamFieldingFirst());
+        this.playInning( cricketGame , MatchConstants.SECOND_INNING , scoreBoardService.getTeamFieldingFirst());
         scoreBoardService.getTeamFieldingFirst().displayTeamScorecard();
     }
 
-    private void playInning(int inning , TeamDto teamBatting){
+    private void playInning(CricketMatchDto cricketGame ,int inning , TeamDto teamBatting){
         for(int i = 0 ; i < cricketGame.getMatchOvers() ; i++){
             System.out.println("\nOver : " + (i+1));
             playOver(inning , cricketGame.getMatchOvers() , teamBatting);
