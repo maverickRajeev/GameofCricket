@@ -3,36 +3,36 @@ package com.tekion.cricketGame.cricketSeriesService.controller;
 import com.tekion.cricketGame.cricketSeriesService.CricketSeriesService;
 import com.tekion.cricketGame.cricketSeriesService.bean.CricketSeriesBean;
 import com.tekion.cricketGame.cricketSeriesService.dto.SeriesRequestDto;
-import com.tekion.cricketGame.cricketSeriesService.repo.CricketSeriesRepo;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.tekion.cricketGame.validator.RequestValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/series")
 public class CricketSeriesController {
 
-    private CricketSeriesService cricketSeriesService;
-    private CricketSeriesRepo cricketSeriesRepo;
-
-    public static final Logger logger = LoggerFactory.getLogger(CricketSeriesController.class);
-
     @Autowired
-    public CricketSeriesController(CricketSeriesService cricketSeriesService , CricketSeriesRepo cricketSeriesRepo) {
-        this.cricketSeriesService = cricketSeriesService;
-        this.cricketSeriesRepo = cricketSeriesRepo;
-    }
+    private CricketSeriesService cricketSeriesService;
 
-    @PostMapping(value = "/startSeries" , consumes = MediaType.APPLICATION_JSON_VALUE , produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/newSeries" , consumes = MediaType.APPLICATION_JSON_VALUE , produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody CricketSeriesBean startSeries(@RequestBody SeriesRequestDto newSeries) {
-      cricketSeriesService.beginSeries(newSeries);
-      return new CricketSeriesBean();
+      CricketSeriesBean seriesInfo = new CricketSeriesBean();
+      if(RequestValidator.seriesRequestValidator(newSeries)) {
+          seriesInfo = cricketSeriesService.beginSeries(newSeries);
+          return seriesInfo;
+      }
+      return seriesInfo;
     }
 
-    @GetMapping(value = "/series/{id}" , produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody CricketSeriesBean displaySeriesDetails(@PathVariable("id") int seriesId){
-        return cricketSeriesRepo.getSeriesDetailsById(seriesId);
+    @GetMapping(value = "/seriesDetails/{id}")
+    public @ResponseBody ResponseEntity<CricketSeriesBean> getSeriesDetails(@PathVariable("id") int seriesId){
+        CricketSeriesBean seriesInfo = new CricketSeriesBean();
+        if(cricketSeriesService.checkIfSeriesExists(seriesId)) {
+            seriesInfo = cricketSeriesService.getSeriesDetails(seriesId);
+        }
+        return ResponseEntity.ok(seriesInfo);
     }
 
 }

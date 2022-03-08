@@ -21,6 +21,16 @@ public class CricketSeriesRepoImpl implements CricketSeriesRepo {
     }
 
     @Override
+    public boolean checkSeriesId(int seriesId){
+        String sqlStatement = "SELECT COUNT(*) FROM series WHERE seriesId = ?";
+        int count = jdbcTemplate.queryForObject(sqlStatement , new Object[]{seriesId} , Integer.class);
+        if(count == 1)
+            return true;
+        else
+            return false;
+    }
+
+    @Override
     public CricketSeriesBean getSeriesDetailsById(int seriesId){
         String sqlStatement = "SELECT * FROM series WHERE seriesId = ? ";
         return jdbcTemplate.queryForObject(sqlStatement , new SeriesMapper() , seriesId);

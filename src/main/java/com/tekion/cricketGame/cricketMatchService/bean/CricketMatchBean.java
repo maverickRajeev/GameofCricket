@@ -14,8 +14,8 @@ public class CricketMatchBean {
     @Column("matchId")
     private int matchId;
 
-    @Column("scoreBoardId")
-    private int scoreBoardId;
+    @Column("tossWinnerTeamId")
+    private int tossWinnerTeamId;
 
     @Column("winnerTeamId")
     private int winnerTeamId;
