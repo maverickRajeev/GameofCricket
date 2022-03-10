@@ -68,6 +68,14 @@ public class ScoreBoardServiceImpl implements ScoreBoardService {
         return scoreBoard.getTargetScore();
     }
 
+    @Override
+    public TeamDto getHighestScoringTeam(ScoreBoardDto scoreBoard){
+         if(scoreBoard.getFirstInningScore() > scoreBoard.getSecondInningScore())
+             return scoreBoard.getTeamBattingFirst();
+         else
+             return scoreBoard.getTeamFieldingFirst();
+    }
+
     private void displayScoreFirstInning(ScoreBoardDto scoreBoard){
         System.out.printf("\n%s: %d/%d (%d.%d Overs)%n",
                 scoreBoard.getTeamBattingFirst().getTeamName(),

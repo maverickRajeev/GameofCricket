@@ -27,4 +27,5 @@ public class TeamRepositoryImpl implements TeamRepository {
         String sqlStatement = "SELECT teamId FROM team WHERE teamName = ?";
         return jdbcTemplate.queryForObject(sqlStatement , Integer.class , teamName);
     }
+
 }

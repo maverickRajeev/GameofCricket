@@ -15,4 +15,5 @@ public interface ScoreBoardService {
     int getTeamWickets(ScoreBoardDto scoreBoard , int inning);
     void updateTargetScore(ScoreBoardDto scoreBoard);
     int getTargetScore(ScoreBoardDto scoreBoard);
+    TeamDto getHighestScoringTeam(ScoreBoardDto scoreBoard);
 }

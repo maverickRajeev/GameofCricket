@@ -5,6 +5,7 @@ import com.tekion.cricketGame.teamService.dto.TeamDto;
 public class CricketMatchDto {
     private int overs;
     private TeamDto team1 , team2;
+    private TeamDto winnerTeam;
 
     public void setMatchOvers(int numberOfOvers){
         this.overs = numberOfOvers;
@@ -30,25 +31,11 @@ public class CricketMatchDto {
         return this.team2;
     }
 
-//    public void displayResult(){
-//        System.out.println("\n** Match Result **");
-//        this.displayScore(teamBattingFirst);
-//        this.displayScore(teamFieldingFirst);
-//
-//        int runs1 = teamBattingFirst.getTeamScore();
-//        System.out.println("\n" + teamBattingFirst.getTeamName() + " Batting Scorecard \n");
-//        teamBattingFirst.displayTeamScorecard();
-//
-//        int runs2 = teamFieldingFirst.getTeamScore();
-//        System.out.println("\n" + teamFieldingFirst.getTeamName() + " Batting Scorecard \n");
-//        teamFieldingFirst.displayTeamScorecard();
-//
-//        if(runs1 > runs2){
-//            System.out.println("\n" + teamBattingFirst.getTeamName() + " won by " + (runs1-runs2) + " runs.");
-//        }else if(runs1 < runs2){
-//            System.out.println("\n" + teamFieldingFirst.getTeamName() + " won by " + (10 - teamFieldingFirst.getWicketsFallen()) + " wickets.");
-//        }else{
-//            System.out.println("\nMatch tied.");
-//        }
-//    }
+    public void setWinnerTeam(TeamDto team){
+        this.winnerTeam = team;
+    }
+
+    public TeamDto getWinnerTeam() {
+        return this.winnerTeam;
+    }
 }

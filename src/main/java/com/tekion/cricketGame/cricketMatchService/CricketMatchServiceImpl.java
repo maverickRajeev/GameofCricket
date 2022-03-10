@@ -2,8 +2,10 @@ package com.tekion.cricketGame.cricketMatchService;
 
 import com.tekion.cricketGame.constants.MatchConstants;
 import com.tekion.cricketGame.constants.RunConstants;
+import com.tekion.cricketGame.cricketMatchService.bean.CricketMatchBean;
 import com.tekion.cricketGame.cricketMatchService.dto.CricketMatchDto;
 import com.tekion.cricketGame.cricketMatchService.repo.CricketMatchRepo;
+import com.tekion.cricketGame.cricketSeriesService.dto.CricketSeriesDto;
 import com.tekion.cricketGame.enums.PlayerStatus;
 import com.tekion.cricketGame.enums.TossChoices;
 import com.tekion.cricketGame.playerService.dto.PlayerDto;
@@ -29,20 +31,23 @@ public class CricketMatchServiceImpl implements CricketMatchService {
         this.cricketMatchRepo = cricketMatchRepo;
     }
 
-    public void startCricketMatch(int numberOfOvers , TeamDto team1 , TeamDto team2){
+    public TeamDto startCricketMatch(CricketSeriesDto cricketSeries){
         CricketMatchDto cricketGame = new CricketMatchDto();
-        ScoreBoardDto scoreBoard = new ScoreBoardDto(numberOfOvers);
-        this.setupMatch(cricketGame , numberOfOvers);
-        this.setTeamInfo(cricketGame , team1 , team2);
+        ScoreBoardDto scoreBoard = new ScoreBoardDto(cricketSeries.getNumberOfOvers());
+        this.setupMatch(cricketGame , cricketSeries.getNumberOfOvers());
+        this.setTeamInfo(cricketGame , cricketSeries.getSeriesTeam1() , cricketSeries.getSeriesTeam2());
         this.playMatch(cricketGame , scoreBoard);
+        return cricketGame.getWinnerTeam();
     }
 
-    private void playMatch(CricketMatchDto cricketGame , ScoreBoardDto scoreBoard){
+    private CricketMatchDto playMatch(CricketMatchDto cricketGame , ScoreBoardDto scoreBoard){
         this.coinToss(cricketGame , scoreBoard);
         this.playFirstInning(cricketGame , scoreBoard);
         this.inningsBreak(cricketGame , scoreBoard);
         this.playSecondInning(cricketGame , scoreBoard);
-//        this.displayResult();
+//        this.updateMatchDb(cricketGame);
+//        this.updateScoreBoardDb(scoreBoard);
+        return this.getMatchResult(cricketGame , scoreBoard);
     }
 
     private void setupMatch(CricketMatchDto cricketGame , int overs){
@@ -143,6 +148,20 @@ public class CricketMatchServiceImpl implements CricketMatchService {
                 teamBatting.changeTeamStrike();
             }
         }
+    }
+
+    private void updateMatchDb(CricketMatchDto cricketMatch){
+        CricketMatchBean matchBean = new CricketMatchBean();
+        cricketMatchRepo.createMatch(matchBean);
+    }
+
+    private void updateScoreBoardDb(ScoreBoardDto scoreBoard){
+
+    }
+
+    private CricketMatchDto getMatchResult(CricketMatchDto cricketMatch , ScoreBoardDto scoreBoard){
+         cricketMatch.setWinnerTeam(scoreBoardService.getHighestScoringTeam(scoreBoard));
+         return cricketMatch;
     }
 
 }

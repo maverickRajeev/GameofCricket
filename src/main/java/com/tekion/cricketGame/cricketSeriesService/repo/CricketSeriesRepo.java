@@ -5,7 +5,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CricketSeriesRepo {
-    void createSeries(CricketSeriesBean cricketSeriesBean);
+    int createSeries(CricketSeriesBean cricketSeriesBean);
     boolean checkSeriesId(int seriesId);
     CricketSeriesBean getSeriesDetailsById(int seriesId);
 

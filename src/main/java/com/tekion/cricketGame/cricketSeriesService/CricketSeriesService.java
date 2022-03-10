@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface CricketSeriesService {
-   void beginSeries(SeriesRequestDto newSeries);
+   CricketSeriesBean beginSeries(SeriesRequestDto newSeries);
    boolean checkIfSeriesExists(int seriesId);
    CricketSeriesBean getSeriesDetails(int seriesId);
 }

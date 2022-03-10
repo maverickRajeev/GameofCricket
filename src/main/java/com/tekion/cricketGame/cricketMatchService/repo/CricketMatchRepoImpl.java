@@ -41,7 +41,9 @@ public class CricketMatchRepoImpl implements CricketMatchRepo {
     @Override
     public List<CricketMatchBean> getAllMatchesBySeriesId(int seriesId){
         String sqlStatement = "SELECT * FROM match WHERE seriesId = ? ";
-        List<CricketMatchBean> matches = jdbcTemplate.queryForList(sqlStatement , new MatchMapper() , seriesId);
+        List<CricketMatchBean> matches = null;
+        matches.add(jdbcTemplate.queryForObject(sqlStatement , new MatchMapper() , seriesId));
+        return matches;
     }
 
 }

@@ -18,12 +18,10 @@ public class CricketSeriesController {
 
     @PostMapping(value = "/newSeries" , consumes = MediaType.APPLICATION_JSON_VALUE , produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody CricketSeriesBean startSeries(@RequestBody SeriesRequestDto newSeries) {
-      CricketSeriesBean seriesInfo = new CricketSeriesBean();
       if(RequestValidator.seriesRequestValidator(newSeries)) {
-          seriesInfo = cricketSeriesService.beginSeries(newSeries);
-          return seriesInfo;
+          return cricketSeriesService.beginSeries(newSeries);
       }
-      return seriesInfo;
+      return new CricketSeriesBean();
     }
 
     @GetMapping(value = "/seriesDetails/{id}")
