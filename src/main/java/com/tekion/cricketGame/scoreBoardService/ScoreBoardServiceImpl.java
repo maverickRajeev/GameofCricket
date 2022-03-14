@@ -2,12 +2,28 @@ package com.tekion.cricketGame.scoreBoardService;
 
 import com.tekion.cricketGame.constants.MatchConstants;
 import com.tekion.cricketGame.constants.RunConstants;
+import com.tekion.cricketGame.scoreBoardService.bean.MatchScoreBoardBean;
 import com.tekion.cricketGame.scoreBoardService.dto.ScoreBoardDto;
+import com.tekion.cricketGame.scoreBoardService.repo.ScoreBoardRepository;
 import com.tekion.cricketGame.teamService.dto.TeamDto;
+import com.tekion.cricketGame.utils.BeanMapperFromDto;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ScoreBoardServiceImpl implements ScoreBoardService {
+
+    @Autowired
+    private ScoreBoardRepository scoreBoardRepository;
+
+    @Autowired
+    private BeanMapperFromDto beanMapperFromDto;
+
+    @Override
+    public void createScoreBoard(ScoreBoardDto scoreBoard, int matchId) {
+        MatchScoreBoardBean scoreBoardBean = beanMapperFromDto.mapScoreBoardDtoToBean(scoreBoard , matchId);
+        scoreBoardRepository.createScoreBoard(scoreBoardBean);
+    }
 
     @Override
     public void displayScoreBoard(ScoreBoardDto scoreBoard , int inning){
@@ -19,9 +35,10 @@ public class ScoreBoardServiceImpl implements ScoreBoardService {
     }
 
     @Override
-    public void setPlayingTeams(ScoreBoardDto scoreBoard , TeamDto teamBattingFirst , TeamDto teamFieldingFirst){
+    public ScoreBoardDto setPlayingTeams(ScoreBoardDto scoreBoard , TeamDto teamBattingFirst , TeamDto teamFieldingFirst){
         scoreBoard.setTeamBattingFirst(teamBattingFirst);
         scoreBoard.setTeamFieldingFirst(teamFieldingFirst);
+        return scoreBoard;
     }
 
     @Override
@@ -35,11 +52,12 @@ public class ScoreBoardServiceImpl implements ScoreBoardService {
     }
 
     @Override
-    public void updateScore(ScoreBoardDto scoreBoard , int ballScore , int inning){
+    public ScoreBoardDto updateScore(ScoreBoardDto scoreBoard , int ballScore , int inning){
         if(inning == MatchConstants.FIRST_INNING)
-            updateScoreFirstInning(scoreBoard , ballScore);
+            scoreBoard = updateScoreFirstInning(scoreBoard , ballScore);
         else
-            updateScoreSecondInning(scoreBoard , ballScore);
+            scoreBoard = updateScoreSecondInning(scoreBoard , ballScore);
+        return scoreBoard;
     }
 
     @Override
@@ -59,8 +77,9 @@ public class ScoreBoardServiceImpl implements ScoreBoardService {
     }
 
     @Override
-    public void updateTargetScore(ScoreBoardDto scoreBoard){
+    public ScoreBoardDto updateTargetScore(ScoreBoardDto scoreBoard){
         scoreBoard.setTargetScore();
+        return scoreBoard;
     }
 
     @Override
@@ -74,6 +93,11 @@ public class ScoreBoardServiceImpl implements ScoreBoardService {
              return scoreBoard.getTeamBattingFirst();
          else
              return scoreBoard.getTeamFieldingFirst();
+    }
+
+    @Override
+    public MatchScoreBoardBean getScoreBoardDetails(int matchId){
+        return scoreBoardRepository.fetchScoreBoardDetailsByMatchId(matchId);
     }
 
     private void displayScoreFirstInning(ScoreBoardDto scoreBoard){
@@ -94,20 +118,22 @@ public class ScoreBoardServiceImpl implements ScoreBoardService {
                 scoreBoard.getSecondInningBallsCompleted()%6);
     }
 
-    private void updateScoreFirstInning(ScoreBoardDto scoreBoard , int ballScore){
+    private ScoreBoardDto updateScoreFirstInning(ScoreBoardDto scoreBoard , int ballScore){
         if(ballScore == RunConstants.WICKET){
             scoreBoard.fallWicketFirstInning();
         }else{
             scoreBoard.updateFirstInningScore(ballScore);
         }
+        return scoreBoard;
     }
 
-    private void updateScoreSecondInning(ScoreBoardDto scoreBoard , int ballScore){
+    private ScoreBoardDto updateScoreSecondInning(ScoreBoardDto scoreBoard , int ballScore){
         if(ballScore == RunConstants.WICKET){
             scoreBoard.fallWicketSecondInning();
         }else{
             scoreBoard.updateSecondInningScore(ballScore);
         }
+        return scoreBoard;
     }
 
 

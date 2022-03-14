@@ -17,9 +17,9 @@ public class MatchMapper implements RowMapper<CricketMatchBean> {
         match.setWinningMarginByRuns(rs.getInt(5));
         match.setWinningMarginByWickets(rs.getInt(6));
         match.setMatchTied(rs.getBoolean(7));
-        match.setCreatedTime(rs.getLong(9));
-        match.setModifiedTime(rs.getLong(10));
-        match.setIsDeleted(rs.getBoolean(11));
+        match.setCreatedTime(rs.getLong(8));
+        match.setModifiedTime(rs.getLong(9));
+        match.setIsDeleted(rs.getBoolean(10));
         return match;
     }
 }

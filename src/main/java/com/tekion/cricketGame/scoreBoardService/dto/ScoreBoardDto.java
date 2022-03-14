@@ -69,7 +69,7 @@ public class ScoreBoardDto {
     }
 
     public void setTargetScore(){
-        this.targetScore = this.firstInningScore;
+        this.targetScore = this.firstInningScore + 1;
     }
 
     public int getTargetScore(){

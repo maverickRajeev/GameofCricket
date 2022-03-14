@@ -42,13 +42,16 @@ public class CricketSeriesRepoImpl implements CricketSeriesRepo {
     }
 
     @Override
+    public void updateSeriesByMatch(CricketSeriesBean cricketSeriesBean , int seriesId){
+        String sqlStatement = "UPDATE series SET noOfMatchesWonByTeam1 = ? , noOfMatchesWonByTeam2 = ? , noOfMatchesTied = ? ,  modifiedTime = ? WHERE seriesId = ?";
+        jdbcTemplate.update(sqlStatement , cricketSeriesBean.getNumberOfMatchesWonByTeam1() , cricketSeriesBean.getNumberOfMatchesWonByTeam2() , cricketSeriesBean.getNumberOfMatchesTied() , System.currentTimeMillis() , seriesId);
+    }
+
+    @Override
     public boolean checkSeriesId(int seriesId){
         String sqlStatement = "SELECT COUNT(*) FROM series WHERE seriesId = ?";
         int count = jdbcTemplate.queryForObject(sqlStatement , new Object[]{seriesId} , Integer.class);
-        if(count == 1)
-            return true;
-        else
-            return false;
+        return count == 1;
     }
 
     @Override

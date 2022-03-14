@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ScoreBoardRepository {
     void createScoreBoard(MatchScoreBoardBean scoreBoardBean);
+    MatchScoreBoardBean fetchScoreBoardDetailsByMatchId(int matchId);
 }

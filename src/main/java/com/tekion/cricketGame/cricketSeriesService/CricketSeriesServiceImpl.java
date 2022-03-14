@@ -2,7 +2,7 @@ package com.tekion.cricketGame.cricketSeriesService;
 
 import com.tekion.cricketGame.cricketMatchService.CricketMatchService;
 import com.tekion.cricketGame.cricketSeriesService.bean.CricketSeriesBean;
-import com.tekion.cricketGame.cricketSeriesService.dto.BeanMapperFromDto;
+import com.tekion.cricketGame.utils.BeanMapperFromDto;
 import com.tekion.cricketGame.cricketSeriesService.dto.CricketSeriesDto;
 import com.tekion.cricketGame.cricketSeriesService.dto.SeriesRequestDto;
 import com.tekion.cricketGame.cricketSeriesService.repo.CricketSeriesRepo;
@@ -34,8 +34,9 @@ public class CricketSeriesServiceImpl implements CricketSeriesService {
         int numberOfMatches = newSeries.getNumberOfMatches();
         CricketSeriesDto cricketSeries = new CricketSeriesDto(matchOvers ,  numberOfMatches);
         cricketSeries = this.setTeamInfo(cricketSeries , newSeries.getTeam1Name() , newSeries.getTeam2Name());
-        cricketSeries = this.playSeries(cricketSeries);
-        return this.updateSeriesDb(cricketSeries);
+        int newCreatedSeriesId = this.createSeriesDb(cricketSeries);
+        this.playSeries(cricketSeries , newCreatedSeriesId);
+        return this.getSeriesDetails(newCreatedSeriesId);
     }
 
     @Override
@@ -54,23 +55,29 @@ public class CricketSeriesServiceImpl implements CricketSeriesService {
         return cricketSeries;
     }
 
-    private CricketSeriesDto playSeries(CricketSeriesDto cricketSeries){
+    private void playSeries(CricketSeriesDto cricketSeries , int seriesId){
 
          for(int i = 0 ; i < cricketSeries.getNumberOfMatches() ; i++){
-             TeamDto winnerTeam = cricketMatchService.startCricketMatch(cricketSeries);
+             TeamDto winnerTeam = cricketMatchService.startCricketMatch(cricketSeries , seriesId);
              if(winnerTeam == cricketSeries.getSeriesTeam1())
                  cricketSeries.setNumberOfMatchesWonByTeam1();
              else
                  cricketSeries.setNumberOfMatchesWonByTeam2();
+
+             cricketSeries = this.setTeamInfo(cricketSeries , cricketSeries.getSeriesTeam1().getTeamName() , cricketSeries.getSeriesTeam2().getTeamName());
          }
 
-         return cricketSeries;
+         this.updateSeriesDb(cricketSeries , seriesId);
     }
 
-    private CricketSeriesBean updateSeriesDb(CricketSeriesDto cricketSeries){
+    private int createSeriesDb(CricketSeriesDto cricketSeries){
         CricketSeriesBean newSeries = beanMapperFromDto.mapSeriesDtoToBean(cricketSeries);
-        int generatedSeriesId = cricketSeriesRepo.createSeries(newSeries);
-        return cricketSeriesRepo.getSeriesDetailsById(generatedSeriesId);
+        return cricketSeriesRepo.createSeries(newSeries);
+    }
+
+    private void updateSeriesDb(CricketSeriesDto cricketSeries , int seriesId){
+        CricketSeriesBean newSeries = beanMapperFromDto.mapSeriesDtoToBean(cricketSeries);
+        cricketSeriesRepo.updateSeriesByMatch(newSeries , seriesId);
     }
 
 }
