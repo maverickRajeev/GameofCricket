@@ -19,10 +19,12 @@ public class ScoreBoardController {
 
     @GetMapping("/{id}")
     public @ResponseBody ResponseEntity<MatchScoreBoardBean> fetchScoreBoardDetails(@PathVariable("id") int matchId){
-         MatchScoreBoardBean scoreBoardInfo = new MatchScoreBoardBean();
+         MatchScoreBoardBean scoreBoardInfo;
          if(cricketMatchService.checkIfMatchExists(matchId)){
              scoreBoardInfo = scoreBoardService.getScoreBoardDetails(matchId);
+             return ResponseEntity.ok().body(scoreBoardInfo);
+         }else{
+             return ResponseEntity.notFound().build();
          }
-         return ResponseEntity.ok(scoreBoardInfo);
     }
 }

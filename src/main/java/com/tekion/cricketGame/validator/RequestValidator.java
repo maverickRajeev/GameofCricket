@@ -9,7 +9,7 @@ public class RequestValidator {
         if(newSeries.getSeriesType().isEmpty())
             return false;
 
-        if(TypesOfMatch.valueOf(newSeries.getSeriesType()) != TypesOfMatch.ODI && TypesOfMatch.valueOf(newSeries.getSeriesType()) != TypesOfMatch.T20 )
+        if(TypesOfMatch.valueOf(newSeries.getSeriesType()) != TypesOfMatch.ODI || TypesOfMatch.valueOf(newSeries.getSeriesType()) != TypesOfMatch.T20 )
             return false;
 
         if(newSeries.getNumberOfMatches() <= 0)

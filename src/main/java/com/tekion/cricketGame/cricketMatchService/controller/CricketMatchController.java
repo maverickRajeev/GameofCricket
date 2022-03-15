@@ -21,19 +21,23 @@ public class CricketMatchController {
 
     @GetMapping("/matchDetails/{id}")
     public @ResponseBody ResponseEntity<CricketMatchBean> getMatchDetails(@PathVariable("id") int matchId){
-        CricketMatchBean matchInfo = new CricketMatchBean();
+        CricketMatchBean matchInfo;
         if(cricketMatchService.checkIfMatchExists(matchId)) {
             matchInfo = cricketMatchService.getMatchDetails(matchId);
+            return ResponseEntity.ok().body(matchInfo);
+        }else{
+            return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(matchInfo);
     }
 
     @GetMapping("/matchList/{id}")
     public @ResponseBody ResponseEntity<List<CricketMatchBean>> getAllMatchesBySeriesId(@PathVariable("id") int seriesId){
-        List<CricketMatchBean> matchList = null;
+        List<CricketMatchBean> matchList;
         if(cricketSeriesService.checkIfSeriesExists(seriesId)){
             matchList = cricketMatchService.listAllMatchesBySeriesId(seriesId);
+            return ResponseEntity.ok().body(matchList);
+        }else{
+            return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(matchList);
     }
 }

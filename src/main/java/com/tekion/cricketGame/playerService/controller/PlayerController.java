@@ -23,17 +23,20 @@ public class PlayerController {
         PlayerBean playerInfo = new PlayerBean();
         if(playerService.checkIfPlayerIdExists(playerId)){
             playerInfo = playerService.getPlayerDetails(playerId);
+            return ResponseEntity.ok().body(playerInfo);
         }
-        return ResponseEntity.ok(playerInfo);
+        return ResponseEntity.notFound().build();
     }
 
     @GetMapping("playerStat/{playerId}/{matchId}")
     public @ResponseBody ResponseEntity<PlayerStatsBean> getPlayerStats(@PathVariable("playerId") int playerId , @PathVariable("matchId") int matchId){
-        PlayerStatsBean playerStat = new PlayerStatsBean();
+        PlayerStatsBean playerStat;
         if(playerService.checkIfPlayerIdExists(playerId) && cricketMatchService.checkIfMatchExists(matchId)){
             playerStat = playerService.getPlayerStats(playerId , matchId);
+            return ResponseEntity.ok().body(playerStat);
+        }else {
+            return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(playerStat);
     }
 
 }

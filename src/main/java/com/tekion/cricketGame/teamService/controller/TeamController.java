@@ -15,10 +15,12 @@ public class TeamController {
 
     @GetMapping("/{id}")
     public @ResponseBody ResponseEntity<TeamBean> getTeamInfo(@PathVariable("id") int teamId){
-        TeamBean teamInfo = new TeamBean();
+        TeamBean teamInfo;
         if(teamService.checkIfTeamIdExists(teamId)){
             teamInfo = teamService.getTeamDetails(teamId);
+            return ResponseEntity.ok().body(teamInfo);
+        }else{
+            return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(teamInfo);
     }
 }

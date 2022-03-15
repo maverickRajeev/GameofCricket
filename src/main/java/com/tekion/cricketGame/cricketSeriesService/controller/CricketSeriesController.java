@@ -17,20 +17,25 @@ public class CricketSeriesController {
     private CricketSeriesService cricketSeriesService;
 
     @PostMapping(value = "/newSeries" , consumes = MediaType.APPLICATION_JSON_VALUE , produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody CricketSeriesBean startSeries(@RequestBody SeriesRequestDto newSeries) {
-      if(RequestValidator.seriesRequestValidator(newSeries)) {
-          return cricketSeriesService.beginSeries(newSeries);
-      }
-      return new CricketSeriesBean();
+    public @ResponseBody ResponseEntity<CricketSeriesBean> startSeries(@RequestBody SeriesRequestDto newSeries) {
+        CricketSeriesBean createdSeries;
+        if(RequestValidator.seriesRequestValidator(newSeries)) {
+            createdSeries = cricketSeriesService.beginSeries(newSeries);
+            return ResponseEntity.ok().body(createdSeries);
+        }else {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @GetMapping(value = "/seriesDetails/{id}")
     public @ResponseBody ResponseEntity<CricketSeriesBean> getSeriesDetails(@PathVariable("id") int seriesId){
-        CricketSeriesBean seriesInfo = new CricketSeriesBean();
+        CricketSeriesBean seriesInfo;
         if(cricketSeriesService.checkIfSeriesExists(seriesId)) {
             seriesInfo = cricketSeriesService.getSeriesDetails(seriesId);
+            return ResponseEntity.ok().body(seriesInfo);
+        }else{
+            return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(seriesInfo);
     }
 
 }
