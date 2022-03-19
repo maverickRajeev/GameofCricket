@@ -13,4 +13,13 @@ public enum TypesOfMatch {
     public int getOversForMatchType(){
         return this.matchOvers;
     }
+
+    public static boolean TypeOfMatchExists(String input){
+        for(TypesOfMatch choice:values()){
+            if(choice.name().equals(input)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
