@@ -8,6 +8,7 @@ import com.tekion.cricketGame.teamService.bean.TeamBean;
 import com.tekion.cricketGame.teamService.dto.TeamDto;
 import com.tekion.cricketGame.teamService.repo.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -37,6 +38,7 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
+    @Cacheable(cacheNames = "teamCache" , key = "#teamId")
     public TeamBean getTeamDetails(int teamId) {
         return teamRepo.getTeamDetails(teamId);
     }

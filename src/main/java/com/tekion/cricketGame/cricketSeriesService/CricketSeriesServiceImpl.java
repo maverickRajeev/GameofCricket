@@ -2,14 +2,16 @@ package com.tekion.cricketGame.cricketSeriesService;
 
 import com.tekion.cricketGame.cricketMatchService.CricketMatchService;
 import com.tekion.cricketGame.cricketSeriesService.bean.CricketSeriesBean;
-import com.tekion.cricketGame.utils.BeanMapperFromDto;
 import com.tekion.cricketGame.cricketSeriesService.dto.CricketSeriesDto;
 import com.tekion.cricketGame.cricketSeriesService.dto.SeriesRequestDto;
 import com.tekion.cricketGame.cricketSeriesService.repo.CricketSeriesRepo;
 import com.tekion.cricketGame.enums.TypesOfMatch;
 import com.tekion.cricketGame.teamService.TeamService;
 import com.tekion.cricketGame.teamService.dto.TeamDto;
+import com.tekion.cricketGame.utils.BeanMapperFromDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -44,6 +46,7 @@ public class CricketSeriesServiceImpl implements CricketSeriesService {
         return cricketSeriesRepo.checkSeriesId(seriesId);
     }
 
+    @Cacheable(cacheNames = "seriesCache" , key = "#seriesId")
     @Override
     public CricketSeriesBean getSeriesDetails(int seriesId){
         return cricketSeriesRepo.getSeriesDetailsById(seriesId);
@@ -75,6 +78,7 @@ public class CricketSeriesServiceImpl implements CricketSeriesService {
         return cricketSeriesRepo.createSeries(newSeries);
     }
 
+    @CachePut(cacheNames = "seriesCache" , key = "#seriesId")
     private void updateSeriesDb(CricketSeriesDto cricketSeries , int seriesId){
         CricketSeriesBean newSeries = beanMapperFromDto.mapSeriesDtoToBean(cricketSeries);
         cricketSeriesRepo.updateSeriesByMatch(newSeries , seriesId);

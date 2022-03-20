@@ -18,6 +18,7 @@ import com.tekion.cricketGame.teamService.dto.TeamDto;
 import com.tekion.cricketGame.teamService.repo.TeamRepository;
 import com.tekion.cricketGame.utils.BeanMapperFromDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -59,11 +60,13 @@ public class CricketMatchServiceImpl implements CricketMatchService {
     }
 
     @Override
+    @Cacheable(cacheNames = "matchCache" , key = "#matchId")
     public CricketMatchBean getMatchDetails(int matchId) {
         return cricketMatchRepo.getMatchDetailsById(matchId);
     }
 
     @Override
+    @Cacheable(cacheNames = "matchListCache" , key = "#seriesId")
     public List<CricketMatchBean> listAllMatchesBySeriesId(int seriesId){
         return cricketMatchRepo.getAllMatchesBySeriesId(seriesId);
     }
@@ -163,10 +166,7 @@ public class CricketMatchServiceImpl implements CricketMatchService {
             teamBatting = scoreBoardService.getTeamFieldingFirst(cricketGame.getScoreBoard());
 
         for(int ball = 0 ; ball < 6 ; ball++){
-            if(inning == MatchConstants.FIRST_INNING)
-                ballScore = playBall(matchOvers , teamBatting.getCurrentBatsMan());
-            else
-                ballScore = playBall(matchOvers , teamBatting.getCurrentBatsMan());
+            ballScore = playBall(matchOvers , teamBatting.getCurrentBatsMan());
 
             cricketGame.setScoreBoard(scoreBoardService.updateScore(cricketGame.getScoreBoard(), ballScore , inning));
 

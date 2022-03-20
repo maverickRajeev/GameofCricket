@@ -8,6 +8,8 @@ import com.tekion.cricketGame.scoreBoardService.repo.ScoreBoardRepository;
 import com.tekion.cricketGame.teamService.dto.TeamDto;
 import com.tekion.cricketGame.utils.BeanMapperFromDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,6 +22,7 @@ public class ScoreBoardServiceImpl implements ScoreBoardService {
     private BeanMapperFromDto beanMapperFromDto;
 
     @Override
+    @CachePut(cacheNames = "scoreBoardCache" , key = "#matchId")
     public void createScoreBoard(ScoreBoardDto scoreBoard, int matchId) {
         MatchScoreBoardBean scoreBoardBean = beanMapperFromDto.mapScoreBoardDtoToBean(scoreBoard , matchId);
         scoreBoardRepository.createScoreBoard(scoreBoardBean);
@@ -96,6 +99,7 @@ public class ScoreBoardServiceImpl implements ScoreBoardService {
     }
 
     @Override
+    @Cacheable(cacheNames = "scoreBoardCache" , key = "#matchId")
     public MatchScoreBoardBean getScoreBoardDetails(int matchId){
         return scoreBoardRepository.fetchScoreBoardDetailsByMatchId(matchId);
     }
