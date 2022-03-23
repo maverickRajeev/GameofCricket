@@ -1,4 +1,4 @@
-package com.tekion.cricketGame.SwaggerConfiguration;
+package com.tekion.cricketGame.config.SwaggerConfiguration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
