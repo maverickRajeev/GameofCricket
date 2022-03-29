@@ -9,5 +9,4 @@ public interface CricketSeriesRepo {
     void updateSeriesByMatch(CricketSeriesBean cricketSeriesBean , int seriesId);
     boolean checkSeriesId(int seriesId);
     CricketSeriesBean getSeriesDetailsById(int seriesId);
-
 }
