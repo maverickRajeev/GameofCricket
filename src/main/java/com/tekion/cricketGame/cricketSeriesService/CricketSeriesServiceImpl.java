@@ -49,7 +49,6 @@ public class CricketSeriesServiceImpl implements CricketSeriesService {
     @Cacheable(cacheNames = {"seriesCache"}, key = "#seriesId")
     @Override
     public CricketSeriesBean getSeriesDetails(int seriesId) {
-        System.out.println("Fetching Series By id : " + seriesId);
         return cricketSeriesRepo.getSeriesDetailsById(seriesId);
     }
 

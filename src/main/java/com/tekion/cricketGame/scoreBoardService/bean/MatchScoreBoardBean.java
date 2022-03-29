@@ -1,11 +1,13 @@
 package com.tekion.cricketGame.scoreBoardService.bean;
 
 import lombok.Data;
+import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
 @Data
 @Table("match_scoreboard")
+@Document(collection = "match_scoreboard")
 public class MatchScoreBoardBean {
 
       @Column("scoreBoardId")

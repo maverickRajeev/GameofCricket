@@ -3,13 +3,15 @@ package com.tekion.cricketGame.scoreBoardService.controller;
 import com.tekion.cricketGame.cricketMatchService.CricketMatchService;
 import com.tekion.cricketGame.scoreBoardService.ScoreBoardService;
 import com.tekion.cricketGame.scoreBoardService.bean.MatchScoreBoardBean;
-import com.tekion.cricketGame.utils.MathCalculations;
+import com.tekion.cricketGame.utils.PerfTestDetails;
+import com.tekion.cricketGame.utils.TaskLimitSemaphore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.*;
 
 @RestController
 @RequestMapping("/scoreBoard")
@@ -33,27 +35,44 @@ public class ScoreBoardController {
     }
 
     @GetMapping("/bulkScoreBoardDetails/{id}/{count}")
-    public @ResponseBody Map<String , Double> bulkCallGetScoreboard(@PathVariable("id") int matchId , @PathVariable("count") int threadCount ){
+    public @ResponseBody Map<String , Double> bulkCallGetScoreboard(@PathVariable("id") int matchId , @PathVariable("count") int taskCount ){
         HashMap<String , Double > metricsDetails = new HashMap<>();
         if(!cricketMatchService.checkIfMatchExists(matchId))
             return metricsDetails;
 
-        long[] responseTimes = new long[threadCount];
-        long startTime = System.currentTimeMillis();
-        long elapsedTime = 0 , currentTime = 0;
-        for(int i = 0 ; i < threadCount ; i++){
-            fetchScoreBoardDetails(matchId);
-            currentTime = System.currentTimeMillis() - startTime;
-            responseTimes[i] = currentTime - elapsedTime;
-            elapsedTime = currentTime;
+        long[] responseTimes = new long[taskCount];
+        long totalResponseTime = 0;
+
+        ExecutorService service = Executors.newFixedThreadPool(100);
+        TaskLimitSemaphore taskLimitSemaphore = new TaskLimitSemaphore(service , 10);
+
+        for(int i = 0 ; i < taskCount ; i++){
+            Future<Long> future = null;
+            try {
+                future = taskLimitSemaphore.submit(new GetScoreboardTask(matchId));
+                responseTimes[i] = future.get();
+            } catch (InterruptedException | ExecutionException e ) {
+                e.printStackTrace();
+            }
+            totalResponseTime += responseTimes[i];
         }
-        long endTime = System.currentTimeMillis();
-        long totalResponseTime = endTime - startTime;
 
-        metricsDetails.put("avgResponseTime" , (double)totalResponseTime/(double) threadCount);
-        metricsDetails.put("90thPercentileTime" , MathCalculations.PercentileCalculation(responseTimes , 90));
-        metricsDetails.put("99thPercentileTime" , MathCalculations.PercentileCalculation(responseTimes , 99));
+        return PerfTestDetails.getPerfMetricDetails(metricsDetails , taskCount , responseTimes , totalResponseTime);
+    }
 
-        return metricsDetails;
+    private class GetScoreboardTask implements Callable<Long> {
+        private final int matchId;
+
+        public GetScoreboardTask(int matchId) {
+            this.matchId = matchId;
+        }
+
+        @Override
+        public Long call() throws Exception {
+            long startTime =  System.currentTimeMillis();
+            fetchScoreBoardDetails(this.matchId);
+            long endTime = System.currentTimeMillis();
+            return endTime - startTime;
+        }
     }
 }

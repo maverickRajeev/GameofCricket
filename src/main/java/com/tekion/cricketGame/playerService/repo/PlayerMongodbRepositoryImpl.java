@@ -74,11 +74,10 @@ public class PlayerMongodbRepositoryImpl implements PlayerRepository {
 
     @Override
     public void addPlayerStat(PlayerStatsBean playerStatsBean) {
-        PlayerStatsBean playerStats = new PlayerStatsBean();
-        playerStats.setCreatedTime(System.currentTimeMillis());
-        playerStats.setModifiedTime(System.currentTimeMillis());
-        playerStats.setIsDeleted(false);
-        mongoTemplate.save(playerStats , "player_stats");
+        playerStatsBean.setCreatedTime(System.currentTimeMillis());
+        playerStatsBean.setModifiedTime(System.currentTimeMillis());
+        playerStatsBean.setIsDeleted(false);
+        mongoTemplate.save(playerStatsBean , "player_stats");
     }
 
     @Override
