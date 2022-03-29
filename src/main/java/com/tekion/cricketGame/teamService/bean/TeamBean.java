@@ -1,11 +1,13 @@
 package com.tekion.cricketGame.teamService.bean;
 
 import lombok.Data;
+import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
 @Data
 @Table("team")
+@Document(collection = "team")
 public class TeamBean {
 
     @Column("teamId")

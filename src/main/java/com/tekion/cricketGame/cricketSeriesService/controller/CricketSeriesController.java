@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @RestController
 @RequestMapping("/series")
@@ -74,24 +76,45 @@ public class CricketSeriesController {
             return metricsDetails;
 
         long[] responseTimes = new long[taskCount];
-        long startTime = System.currentTimeMillis();
-        long elapsedTime = 0 , currentTime = 0;
+        long totalResponseTime = 0;
+        //100
 
+        ExecutorService service = Executors.newFixedThreadPool(100);
+
+        // Spring microservices at action --
+        // at any time you cannot spawn more than 10 threads
+        // semaphore --> to control the number of threads or tasks submitted to the cacheThreadPool
         for(int i = 0 ; i < taskCount ; i++){
-            getSeriesDetails(seriesId);
-            currentTime = System.currentTimeMillis() - startTime;
-            responseTimes[i] = currentTime - elapsedTime;
-            elapsedTime = currentTime;
+            long startTaskTime = System.currentTimeMillis();
+            service.execute(new Task(seriesId));
+            long endTaskTime = System.currentTimeMillis();
+            responseTimes[i] = endTaskTime - startTaskTime;
+            totalResponseTime += responseTimes[i];
         }
 
-        long endTime = System.currentTimeMillis();
-        long totalResponseTime = endTime - startTime;
+        for(int i = 0 ; i < responseTimes.length ; i++){
+            System.out.println(responseTimes[i]);
+        }
 
         metricsDetails.put("avgResponseTime" , (double)totalResponseTime/(double) taskCount);
         metricsDetails.put("90thPercentileTime" , MathCalculations.PercentileCalculation(responseTimes , 90));
         metricsDetails.put("99thPercentileTime" , MathCalculations.PercentileCalculation(responseTimes , 99));
 
         return metricsDetails;
+    }
+
+    private class Task implements Runnable{
+        private final int seriesId;
+        public Task(int seriesId) {
+            this.seriesId = seriesId;
+        }
+
+        @Override
+        public void run() {
+            System.currentTimeMillis();
+
+            getSeriesDetails(seriesId);
+        }
     }
 }
 

@@ -1,11 +1,13 @@
 package com.tekion.cricketGame.cricketSeriesService.bean;
 
 import lombok.Data;
+import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
 @Data
 @Table("series")
+@Document(collection = "series")
 public class CricketSeriesBean {
 
      @Column("seriesId")
@@ -40,5 +42,4 @@ public class CricketSeriesBean {
 
      @Column("isDeleted")
      private boolean isDeleted;
-
 }
