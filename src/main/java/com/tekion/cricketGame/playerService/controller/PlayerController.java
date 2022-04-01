@@ -26,7 +26,7 @@ public class PlayerController {
 
     @GetMapping("/playerInfo/{id}")
     public @ResponseBody ResponseEntity<PlayerBean> getPlayerInfo(@PathVariable("id") int playerId){
-        PlayerBean playerInfo = new PlayerBean();
+        PlayerBean playerInfo;
         if(playerService.checkIfPlayerIdExists(playerId)){
             playerInfo = playerService.getPlayerDetails(playerId);
             return ResponseEntity.ok().body(playerInfo);
@@ -57,6 +57,7 @@ public class PlayerController {
             totalResponseTime += responseTimes[i];
         }
 
+        service.shutdown();
         return PerfTestDetails.getPerfMetricDetails(metricsDetails , taskCount , responseTimes , totalResponseTime);
     }
 
@@ -94,10 +95,11 @@ public class PlayerController {
             totalResponseTime += responseTimes[i];
         }
 
+        service.shutdown();
         return PerfTestDetails.getPerfMetricDetails(metricsDetails , taskCount , responseTimes , totalResponseTime);
     }
 
-    private class GetPlayerInfoTask implements Callable<Long> {
+    private final class GetPlayerInfoTask implements Callable<Long> {
         private final int playerId;
 
         public GetPlayerInfoTask(int playerId) {
@@ -113,7 +115,7 @@ public class PlayerController {
         }
     }
 
-    private class GetPlayerStatTask implements Callable<Long> {
+    private final class GetPlayerStatTask implements Callable<Long> {
         private final int playerId , matchId;
 
         public GetPlayerStatTask(int playerId , int matchId) {

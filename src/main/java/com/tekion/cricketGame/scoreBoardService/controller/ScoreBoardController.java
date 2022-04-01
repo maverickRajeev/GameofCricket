@@ -57,10 +57,11 @@ public class ScoreBoardController {
             totalResponseTime += responseTimes[i];
         }
 
+        service.shutdown();
         return PerfTestDetails.getPerfMetricDetails(metricsDetails , taskCount , responseTimes , totalResponseTime);
     }
 
-    private class GetScoreboardTask implements Callable<Long> {
+    private final class GetScoreboardTask implements Callable<Long> {
         private final int matchId;
 
         public GetScoreboardTask(int matchId) {

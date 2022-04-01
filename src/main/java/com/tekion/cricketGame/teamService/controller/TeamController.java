@@ -53,10 +53,11 @@ public class TeamController {
             totalResponseTime += responseTimes[i];
         }
 
+        service.shutdown();
         return PerfTestDetails.getPerfMetricDetails(metricsDetails , taskCount , responseTimes , totalResponseTime);
     }
 
-    private class GetTeamDetailsTask implements Callable<Long> {
+    private final class GetTeamDetailsTask implements Callable<Long> {
         private final int teamId;
 
         public GetTeamDetailsTask(int teamId) {

@@ -35,6 +35,7 @@ public class CricketMatchController {
         }
     }
 
+    // we either need to provide x (SQL )  or y (SQL)
     @GetMapping("/bulkMatchDetails/{id}/{count}")
     public @ResponseBody Map<String , Double> bulkCallGetMatchDetails(@PathVariable("id") int matchId , @PathVariable("count") int taskCount ){
         HashMap<String , Double > metricsDetails = new HashMap<>();
@@ -58,6 +59,7 @@ public class CricketMatchController {
             totalResponseTime += responseTimes[i];
         }
 
+        service.shutdown();
         return PerfTestDetails.getPerfMetricDetails(metricsDetails , taskCount , responseTimes , totalResponseTime);
     }
 
@@ -95,11 +97,11 @@ public class CricketMatchController {
             totalResponseTime += responseTimes[i];
         }
 
+        service.shutdown();
         return PerfTestDetails.getPerfMetricDetails(metricsDetails , taskCount , responseTimes , totalResponseTime);
-
     }
 
-    private class GetMatchDetailsTask implements Callable<Long> {
+    private final class GetMatchDetailsTask implements Callable<Long> {
         private final int matchId;
 
         public GetMatchDetailsTask(int matchId) {
@@ -115,7 +117,7 @@ public class CricketMatchController {
         }
     }
 
-    private class GetMatchListTask implements Callable<Long> {
+    private final class GetMatchListTask implements Callable<Long> {
         private final int seriesId;
 
         public GetMatchListTask(int seriesId) {

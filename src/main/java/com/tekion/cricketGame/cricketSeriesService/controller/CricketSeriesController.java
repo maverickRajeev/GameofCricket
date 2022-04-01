@@ -56,6 +56,7 @@ public class CricketSeriesController {
             totalResponseTime += responseTimes[i];
         }
 
+        service.shutdown();
         return PerfTestDetails.getPerfMetricDetails(metricsDetails , taskCount , responseTimes , totalResponseTime);
     }
 
@@ -93,10 +94,11 @@ public class CricketSeriesController {
             totalResponseTime += responseTimes[i];
         }
 
+        service.shutdown();
         return PerfTestDetails.getPerfMetricDetails(metricsDetails , taskCount , responseTimes , totalResponseTime);
     }
 
-    private class CreateNewSeriesTask implements Callable<Long> {
+    private final class CreateNewSeriesTask implements Callable<Long> {
 
         private final SeriesRequestDto newSeries;
 
@@ -114,7 +116,7 @@ public class CricketSeriesController {
 
     }
 
-    private class GetSeriesDetailsTask implements Callable<Long> {
+    private final class GetSeriesDetailsTask implements Callable<Long> {
         private final int seriesId;
 
         public GetSeriesDetailsTask(int seriesId) {
