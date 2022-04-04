@@ -1,5 +1,6 @@
 package com.tekion.cricketGame.utils;
 
+import com.tekion.cricketGame.config.DatabaseConfig.DataProvider;
 import com.tekion.cricketGame.cricketMatchService.bean.CricketMatchBean;
 import com.tekion.cricketGame.cricketMatchService.dto.CricketMatchDto;
 import com.tekion.cricketGame.cricketSeriesService.bean.CricketSeriesBean;
@@ -18,8 +19,8 @@ public class BeanMapperFromDto {
     private final TeamRepository teamRepo;
 
     @Autowired
-    public BeanMapperFromDto(TeamRepository teamRepo){
-        this.teamRepo = teamRepo;
+    public BeanMapperFromDto(DataProvider dataProvider){
+        this.teamRepo = dataProvider.getRepoFile(TeamRepository.class);
     }
 
     public CricketSeriesBean mapSeriesDtoToBean(CricketSeriesDto cricketSeries){

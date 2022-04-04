@@ -1,18 +1,21 @@
 package com.tekion.cricketGame.cricketMatchService.repo;
 
+import com.tekion.cricketGame.config.DatabaseConfig.ClassMapper;
+import com.tekion.cricketGame.config.DatabaseConfig.ClassMapperMetaInfo;
+import com.tekion.cricketGame.config.DatabaseConfig.MongoRepo;
 import com.tekion.cricketGame.counterServiceForMongo.service.CounterService;
 import com.tekion.cricketGame.cricketMatchService.bean.CricketMatchBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Primary;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.*;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-@Primary
-public class CricketMatchMongodbRepoImpl implements CricketMatchRepo{
+@ClassMapperMetaInfo(getClassName = ClassMapper.CRICKET_MATCH_REPO)
+public class CricketMatchMongodbRepoImpl implements CricketMatchRepo , MongoRepo {
 
     @Autowired
     private MongoTemplate mongoTemplate;

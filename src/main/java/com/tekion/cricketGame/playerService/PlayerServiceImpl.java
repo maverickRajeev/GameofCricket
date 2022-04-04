@@ -1,5 +1,6 @@
 package com.tekion.cricketGame.playerService;
 
+import com.tekion.cricketGame.config.DatabaseConfig.DataProvider;
 import com.tekion.cricketGame.playerService.bean.PlayerBean;
 import com.tekion.cricketGame.playerService.bean.PlayerStatsBean;
 import com.tekion.cricketGame.playerService.dto.PlayerDto;
@@ -13,11 +14,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class PlayerServiceImpl implements PlayerService{
 
-    @Autowired
-    private PlayerRepository playerRepo;
+    private final PlayerRepository playerRepo;
+    private final BeanMapperFromDto beanMapperFromDto;
 
     @Autowired
-    private BeanMapperFromDto beanMapperFromDto;
+    public PlayerServiceImpl(BeanMapperFromDto beanMapperFromDto , DataProvider dataProvider){
+        this.playerRepo = dataProvider.getRepoFile(PlayerRepository.class);
+        this.beanMapperFromDto = beanMapperFromDto;
+    }
 
     @Override
     public int fetchPlayerId(int teamId, String playerName) {

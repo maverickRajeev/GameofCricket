@@ -1,5 +1,6 @@
 package com.tekion.cricketGame.cricketSeriesService;
 
+import com.tekion.cricketGame.config.DatabaseConfig.DataProvider;
 import com.tekion.cricketGame.cricketMatchService.CricketMatchService;
 import com.tekion.cricketGame.cricketSeriesService.bean.CricketSeriesBean;
 import com.tekion.cricketGame.cricketSeriesService.dto.CricketSeriesDto;
@@ -23,11 +24,11 @@ public class CricketSeriesServiceImpl implements CricketSeriesService {
     private final BeanMapperFromDto beanMapperFromDto;
 
     @Autowired
-    public CricketSeriesServiceImpl(CricketSeriesRepo cricketSeriesRepo, CricketMatchService cricketMatchService, TeamService teamService, BeanMapperFromDto beanMapperFromDto) {
-        this.cricketSeriesRepo = cricketSeriesRepo;
-        this.cricketMatchService = cricketMatchService;
-        this.teamService = teamService;
+    public CricketSeriesServiceImpl(CricketMatchService cricketMatchService, TeamService teamService, BeanMapperFromDto beanMapperFromDto , DataProvider dataProvider) {
+        this.cricketSeriesRepo = dataProvider.getRepoFile(CricketSeriesRepo.class);
         this.beanMapperFromDto = beanMapperFromDto;
+        this.teamService = teamService;
+        this.cricketMatchService = cricketMatchService;
     }
 
     @Override

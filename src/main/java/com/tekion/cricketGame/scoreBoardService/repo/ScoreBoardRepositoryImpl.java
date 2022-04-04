@@ -1,5 +1,8 @@
 package com.tekion.cricketGame.scoreBoardService.repo;
 
+import com.tekion.cricketGame.config.DatabaseConfig.ClassMapper;
+import com.tekion.cricketGame.config.DatabaseConfig.ClassMapperMetaInfo;
+import com.tekion.cricketGame.config.DatabaseConfig.SqlRepo;
 import com.tekion.cricketGame.scoreBoardService.bean.MatchScoreBoardBean;
 import com.tekion.cricketGame.scoreBoardService.dto.ScoreBoardMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,7 +10,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class ScoreBoardRepositoryImpl implements ScoreBoardRepository {
+@ClassMapperMetaInfo(getClassName = ClassMapper.SCOREBOARD_REPO)
+public class ScoreBoardRepositoryImpl implements ScoreBoardRepository , SqlRepo {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;

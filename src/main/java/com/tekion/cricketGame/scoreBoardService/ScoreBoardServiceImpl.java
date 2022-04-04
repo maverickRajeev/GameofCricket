@@ -1,5 +1,6 @@
 package com.tekion.cricketGame.scoreBoardService;
 
+import com.tekion.cricketGame.config.DatabaseConfig.DataProvider;
 import com.tekion.cricketGame.constants.MatchConstants;
 import com.tekion.cricketGame.constants.RunConstants;
 import com.tekion.cricketGame.scoreBoardService.bean.MatchScoreBoardBean;
@@ -15,11 +16,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class ScoreBoardServiceImpl implements ScoreBoardService {
 
-    @Autowired
-    private ScoreBoardRepository scoreBoardRepository;
+    private final ScoreBoardRepository scoreBoardRepository;
+    private final BeanMapperFromDto beanMapperFromDto;
 
     @Autowired
-    private BeanMapperFromDto beanMapperFromDto;
+    public ScoreBoardServiceImpl(DataProvider dataProvider , BeanMapperFromDto beanMapperFromDto){
+        this.scoreBoardRepository = dataProvider.getRepoFile(ScoreBoardRepository.class);
+        this.beanMapperFromDto = beanMapperFromDto;
+    }
 
     @Override
     @CachePut(cacheNames = "scoreBoardCache" , key = "#matchId")

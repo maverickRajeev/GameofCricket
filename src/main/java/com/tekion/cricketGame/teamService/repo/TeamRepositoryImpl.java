@@ -1,5 +1,8 @@
 package com.tekion.cricketGame.teamService.repo;
 
+import com.tekion.cricketGame.config.DatabaseConfig.ClassMapper;
+import com.tekion.cricketGame.config.DatabaseConfig.ClassMapperMetaInfo;
+import com.tekion.cricketGame.config.DatabaseConfig.SqlRepo;
 import com.tekion.cricketGame.teamService.bean.TeamBean;
 import com.tekion.cricketGame.teamService.dto.TeamMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,7 +10,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class TeamRepositoryImpl implements TeamRepository {
+@ClassMapperMetaInfo(getClassName = ClassMapper.TEAM_REPO)
+public class TeamRepositoryImpl implements TeamRepository , SqlRepo {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;

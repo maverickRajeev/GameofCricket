@@ -1,5 +1,6 @@
 package com.tekion.cricketGame.teamService;
 
+import com.tekion.cricketGame.config.DatabaseConfig.DataProvider;
 import com.tekion.cricketGame.constants.MatchConstants;
 import com.tekion.cricketGame.cricketMatchService.dto.CricketMatchDto;
 import com.tekion.cricketGame.playerService.bean.PlayerBean;
@@ -20,9 +21,9 @@ public class TeamServiceImpl implements TeamService {
     private final PlayerRepository playerRepo;
 
     @Autowired
-    public TeamServiceImpl(TeamRepository teamRepo, PlayerRepository playerRepo) {
-        this.teamRepo = teamRepo;
-        this.playerRepo = playerRepo;
+    public TeamServiceImpl(DataProvider dataProvider) {
+        this.teamRepo = dataProvider.getRepoFile(TeamRepository.class);
+        this.playerRepo = dataProvider.getRepoFile(PlayerRepository.class);
     }
 
     @Override

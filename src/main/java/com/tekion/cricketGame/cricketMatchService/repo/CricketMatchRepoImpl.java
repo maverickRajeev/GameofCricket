@@ -1,5 +1,8 @@
 package com.tekion.cricketGame.cricketMatchService.repo;
 
+import com.tekion.cricketGame.config.DatabaseConfig.ClassMapper;
+import com.tekion.cricketGame.config.DatabaseConfig.ClassMapperMetaInfo;
+import com.tekion.cricketGame.config.DatabaseConfig.SqlRepo;
 import com.tekion.cricketGame.cricketMatchService.bean.CricketMatchBean;
 import com.tekion.cricketGame.cricketMatchService.dto.MatchMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +16,8 @@ import java.sql.Statement;
 import java.util.List;
 
 @Repository
-public class CricketMatchRepoImpl implements CricketMatchRepo {
+@ClassMapperMetaInfo(getClassName = ClassMapper.CRICKET_MATCH_REPO)
+public class CricketMatchRepoImpl implements CricketMatchRepo , SqlRepo {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;

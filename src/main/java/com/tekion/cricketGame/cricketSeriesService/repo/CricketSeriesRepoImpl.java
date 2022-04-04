@@ -1,5 +1,8 @@
 package com.tekion.cricketGame.cricketSeriesService.repo;
 
+import com.tekion.cricketGame.config.DatabaseConfig.ClassMapper;
+import com.tekion.cricketGame.config.DatabaseConfig.ClassMapperMetaInfo;
+import com.tekion.cricketGame.config.DatabaseConfig.SqlRepo;
 import com.tekion.cricketGame.cricketSeriesService.bean.CricketSeriesBean;
 import com.tekion.cricketGame.cricketSeriesService.dto.SeriesMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +15,8 @@ import java.sql.PreparedStatement;
 import java.sql.Statement;
 
 @Repository
-public class CricketSeriesRepoImpl implements CricketSeriesRepo {
+@ClassMapperMetaInfo(getClassName = ClassMapper.CRICKET_SERIES_REPO)
+public class CricketSeriesRepoImpl implements CricketSeriesRepo , SqlRepo {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;

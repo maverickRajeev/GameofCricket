@@ -1,5 +1,6 @@
 package com.tekion.cricketGame.cricketMatchService;
 
+import com.tekion.cricketGame.config.DatabaseConfig.DataProvider;
 import com.tekion.cricketGame.constants.MatchConstants;
 import com.tekion.cricketGame.constants.RunConstants;
 import com.tekion.cricketGame.cricketMatchService.bean.CricketMatchBean;
@@ -34,13 +35,13 @@ public class CricketMatchServiceImpl implements CricketMatchService {
     private final BeanMapperFromDto beanMapperFromDto;
 
     @Autowired
-    public CricketMatchServiceImpl(TeamService teamService , TeamRepository teamRepo , ScoreBoardService scoreBoardService , PlayerService playerService , CricketMatchRepo cricketMatchRepo , BeanMapperFromDto beanMapperFromDto){
-        this.teamService = teamService;
-        this.teamRepo = teamRepo;
-        this.scoreBoardService = scoreBoardService;
-        this.playerService = playerService;
-        this.cricketMatchRepo = cricketMatchRepo;
+    public CricketMatchServiceImpl(DataProvider dataProvider , BeanMapperFromDto beanMapperFromDto , PlayerService playerService ,  TeamService teamService , ScoreBoardService scoreBoardService){
+        this.cricketMatchRepo = dataProvider.getRepoFile(CricketMatchRepo.class);
+        this.teamRepo = dataProvider.getRepoFile(TeamRepository.class);
         this.beanMapperFromDto = beanMapperFromDto;
+        this.playerService = playerService;
+        this.teamService = teamService;
+        this.scoreBoardService = scoreBoardService;
     }
 
     @Override

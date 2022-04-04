@@ -1,5 +1,8 @@
 package com.tekion.cricketGame.playerService.repo;
 
+import com.tekion.cricketGame.config.DatabaseConfig.ClassMapper;
+import com.tekion.cricketGame.config.DatabaseConfig.ClassMapperMetaInfo;
+import com.tekion.cricketGame.config.DatabaseConfig.SqlRepo;
 import com.tekion.cricketGame.playerService.bean.PlayerBean;
 import com.tekion.cricketGame.playerService.bean.PlayerStatsBean;
 import com.tekion.cricketGame.playerService.dto.PlayerMapper;
@@ -11,7 +14,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public class PlayerRepositoryImpl implements PlayerRepository {
+@ClassMapperMetaInfo(getClassName = ClassMapper.PLAYER_REPO)
+public class PlayerRepositoryImpl implements PlayerRepository , SqlRepo {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
