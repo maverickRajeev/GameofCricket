@@ -61,11 +61,8 @@ public class DataProvider {
 
 
     public <T> T getRepoFile(Class<T> interfaceWhoseObjectToGet){
-        System.out.println(currentEnvironmentType);
-        System.out.println("Interface whose object to get - " + interfaceWhoseObjectToGet.getName());
         if(Objects.nonNull(typeToClassNameToRepoMap.get(currentEnvironmentType)) &&
                 Objects.nonNull(typeToClassNameToRepoMap.get(currentEnvironmentType).get(interfaceWhoseObjectToGet.getName()))){
-            System.out.println("Returned class - "  + typeToClassNameToRepoMap.get(currentEnvironmentType).get(interfaceWhoseObjectToGet.getName()).getClass());
             return (T) typeToClassNameToRepoMap.get(currentEnvironmentType).get(interfaceWhoseObjectToGet.getName());
         }
         throw new RuntimeException();

@@ -17,8 +17,10 @@ public class DatabaseController {
     @GetMapping(value = "/changeDb/{dbType}")
     public @ResponseBody ResponseEntity<String> changeDbType(@PathVariable("dbType") String dbType){
         DbType databaseType = DbType.valueOf(dbType.toUpperCase());
-        DataProvider.runtimeUpdateDbType(databaseType);
-        CricketGameApplication.restart();
+        if(DataProvider.currentEnvironmentType != databaseType) {
+            DataProvider.runtimeUpdateDbType(databaseType);
+            CricketGameApplication.restart();
+        }
         return ResponseEntity.ok().body("Database type changed successfully to " + dbType.toUpperCase());
     }
 
